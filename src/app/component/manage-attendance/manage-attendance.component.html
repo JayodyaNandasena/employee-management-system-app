@@ -1,0 +1,52 @@
+<div class="row">
+    <div class="col-3">
+        <app-sidebar-nonmanager *ngIf="!isManager"></app-sidebar-nonmanager>
+        <app-sidebar-admin *ngIf="isManager"></app-sidebar-admin>
+    </div>
+    <div class="col-9">
+        <div class="card border-0">
+            <div *ngIf="isManager">
+                <div class="row mb-3 mt-3">
+                    <div class="col-md-4">
+                        <input type="text" id="employeeIdFilter" class="form-control" placeholder="Enter Employee ID"
+                        [(ngModel)]="empId"/>
+                    </div>
+                    <div class="col-md-4">
+                        <button class="btn btn-primary" (click)="loadEmployeeRecords()">Apply Filter</button>
+                    </div>
+                </div>
+                <div class="card-header">
+                    <h5 class="card-title">Attendance Records</h5>
+                    <h6 class="card-subtitle text-muted">Manage attendance records below</h6>
+                </div>
+            </div>
+
+            <div class="card-header mt-3" *ngIf="!isManager">
+                <h5 class="card-title">Attendance Records</h5>
+                <h6 class="card-subtitle text-muted">View your attendance records below</h6>
+            </div>            
+            <div class="card-body">
+                <table class="table table-striped" id="attendanceTable">
+                    <thead>
+                        <tr>
+                            <th scope="col">Employee Name</th>
+                            <th scope="col">Date</th>
+                            <th scope="col">Sign In Time</th>
+                            <th scope="col">Sign Out Time</th>
+                            <th scope="col">Total Time Spent</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let record of records" data-bs-toggle="modal" data-bs-target="#leaveDetailsModal">
+                            <td>{{record.employeeName}}</td>
+                            <td>{{record.date}}</td>
+                            <td>{{record.timeIn}}</td>
+                            <td>{{record.timeOut ? record.timeOut : '-'}}</td>
+                            <td>{{record.timeSpent ? record.timeSpent : '-'}}</td>
+                        </tr>                        
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,92 @@
+<div class="row">
+    <div class="col-3">
+        <app-sidebar-nonmanager *ngIf="!isManager"></app-sidebar-nonmanager>
+        <app-sidebar-admin *ngIf="isManager"></app-sidebar-admin>
+    </div>
+    <div class="col-9">
+        <div class="container my-5">
+            <div class="row">
+                <div class="col-md-8 offset-md-2">
+                    <div class="card">
+                        <div class="card-header text-center">
+                            <h3>Salary Slip</h3>
+                        </div>
+                        <div class="card-body">
+                            <!-- Earnings and Deductions Sections Side by Side -->
+                            <div class="row">
+                                <div class="col-md-6 mb-4">
+                                    <h5 class="mb-3">Earnings</h5>
+                                    <table class="table table-bordered">
+                                        <tbody>
+                                            <tr>
+                                                <td>Basic Salary</td>
+                                                <td id="basic-salary">Rs. {{ salary.basicSalary}}</td>
+                                            </tr>
+                                            <tr>
+                                                <td>OT Hours</td>
+                                                <td id="ot-hours">{{salary.otHours}}</td>
+                                            </tr>
+                                            <tr>
+                                                <td>OT Per Hour</td>
+                                                <td id="ot-per-hour">Rs. {{salary.otPerHour}}</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Gross OT Income</td>
+                                                <td id="gross-ot-income">Rs. {{salary.grossOTIncome}}</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <div class="col-md-6 mb-4">
+                                    <h5 class="mb-3">Deductions</h5>
+                                    <table class="table table-bordered">
+                                        <tbody>
+                                            <tr>
+                                                <td>EPF Percentage</td>
+                                                <td id="epf-percentage">{{salary.epfPercentage}}%</td>
+                                            </tr>
+                                            <tr>
+                                                <td>EPF Amount</td>
+                                                <td id="epf-amount">Rs. {{salary.epfAmount}}</td>
+                                            </tr>
+                                            <tr>
+                                                <td>ETF Percentage</td>
+                                                <td id="etf-percentage">{{salary.etfPercentage}}%</td>
+                                            </tr>
+                                            <tr>
+                                                <td>ETF Amount</td>
+                                                <td id="etf-amount">Rs. {{salary.etfAmount}}</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+    
+                            <!-- Totals Section -->
+                            <h5 class="mb-3">Totals</h5>
+                            <table class="table table-bordered">
+                                <tbody>
+                                    <tr>
+                                        <td>Gross Earnings</td>
+                                        <td id="gross-earnings">Rs. {{salary.grossEarnings}}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Gross Deductions</td>
+                                        <td id="gross-deductions">Rs. {{salary.grossDeductions}}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Gross Salary</td>
+                                        <td id="gross-salary">Rs. {{salary.grossSalary}}</td>
+                                        </tr>
+                                    <tr>   <td>Tax</td>
+                                        <td id="gross-salary">Rs. {{salary.grossSalary}}</td>   
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

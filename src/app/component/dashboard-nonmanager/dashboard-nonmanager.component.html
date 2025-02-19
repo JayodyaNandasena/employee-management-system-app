@@ -1,0 +1,202 @@
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-3 m-0 p-0">
+            <app-sidebar-nonmanager></app-sidebar-nonmanager>
+        </div>
+        <div class="col-9">
+            <div class="mb-3">
+                <h4>Dashboard</h4>
+            </div>
+            <div class="row">
+                <div class="col-12 col-md-6 d-flex">
+                    <div class="card flex-fill border-0 illustration">
+                        <div class="card-body p-0 d-flex flex-fill">
+                            <div class="row g-0 w-100">
+                                <div class="col-6">
+                                    <div class="p-3 m-1">
+                                        <h4>Welcome Back, {{ employeeName }}</h4>
+                                        <p class="mb-0">Access and Manage Your Employee Operations</p>
+                                    </div>
+                                </div>
+                                <div class="col-6 align-self-end text-end">
+                                    <img src="img/customer-support.jpg" class="img-fluid illustration-img" alt="">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-12 col-md-6 d-flex">
+                    <div class="card flex-fill border-0">
+                        <div class="card-body py-4 bg-dark-subtle">
+                            <div class="d-flex align-items-start">
+                                <div class="flex-grow-1">
+                                    <div class="col-md-12 text-center">
+                                        <h4 class="mt-1 mb-3">Quickly mark your Attendance</h4>
+                                        <div id="currentDateTime" class="mb-3 text-dark">{{ currentDateTime }}</div>
+                                        <button class="btn btn-lg btn-primary m-3" id="signInBtn"
+                                            (click)="clockIn()">Clock In</button>
+                                        <button class="btn btn-lg btn-danger m-3" id="signOutBtn"
+                                            (click)="clockOut()">Clock Out</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- -------------------------------------------------------------------------------------------------- -->
+            <div class="row">
+                <div class="col-9 col-md-3 d-flex">
+                    <a href="/profile" class="text-decoration-none">
+                        <div class="card flex-fill border-0 illustration2">
+                            <div class="card-body p-0 d-flex flex-fill">
+                                <div class="row g-0 w-100">
+                                    <div class="col-12">
+                                        <div class="p-3 mt-1">
+                                            <h4>My Profile</h4>
+                                        </div>
+                                    </div>
+                                    <div class="col-6">
+                                        <div class="p-3 m-1">
+                                            <p class="mb-0">Manage your account settings</p>
+                                        </div>
+                                    </div>
+                                    <div class="col-6 align-self-end text-end">
+                                        <img src="img/customer-support.jpg" class="img-fluid illustration-img" alt="">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+
+                <div class="col-12 col-md-3 d-flex">
+                    <a href="/salary" class="text-decoration-none">
+                        <div class="card flex-fill border-0 illustration">
+                            <div class="card-body p-0 d-flex flex-fill">
+                                <div class="row g-0 w-100">
+                                    <div class="col-6">
+                                        <div class="p-3 m-1">
+                                            <h4>View Salary Slip</h4>
+                                            <p class="mb-0">Access your salary slip</p>
+                                        </div>
+                                    </div>
+                                    <div class="col-6 align-self-end text-end">
+                                        <img src="img/customer-support.jpg" class="img-fluid illustration-img" alt="">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+
+                <div class="col-12 col-md-3 d-flex">
+                    <a href="/requestLeaves" class="text-decoration-none">
+                        <div class="card flex-fill border-0 illustration4">
+                            <div class="card-body p-0 d-flex flex-fill">
+                                <div class="row g-0 w-100">
+                                    <div class="col-6">
+                                        <div class="p-3 m-1">
+                                            <h4>Request Leaves</h4>
+                                            <p class="mb-0">Submit leave requests</p>
+                                        </div>
+                                    </div>
+                                    <div class="col-6 align-self-end text-end">
+                                        <img src="img/customer-support.jpg" class="img-fluid illustration-img" alt="">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+
+                <div class="col-12 col-md-3 d-flex">
+                    <a  href="/requestOT" class="text-decoration-none">
+                        <div class="card flex-fill border-0 illustration2">
+                            <div class="card-body p-0 d-flex flex-fill">
+                                <div class="row g-0 w-100">
+                                    <div class="col-6">
+                                        <div class="p-3 m-1">
+                                            <h4>Request OT</h4>
+                                            <p class="mb-0">Submit overtime requests</p>
+                                        </div>
+                                    </div>
+                                    <div class="col-6 align-self-end text-end">
+                                        <img src="img/customer-support.jpg" class="img-fluid illustration-img" alt="">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </a>
+                    
+                </div>
+            </div>
+
+            <!-- ------------------------------------------------------------------------------------------------->
+
+            <div class="row">
+                <div class="col-12 col-md-3 d-flex">
+                    <a href="/manageAttendance" class="text-decoration-none">
+                        <div class="card flex-fill border-0 illustration3">
+                            <div class="card-body p-0 d-flex flex-fill">
+                                <div class="row g-0 w-100">
+                                    <div class="col-6">
+                                        <div class="p-3 m-1">
+                                            <h4>View Attendence</h4>
+                                            <p class="mb-0">Check your attendance</p>
+                                        </div>
+                                    </div>
+                                    <div class="col-6 align-self-end text-end">
+                                        <img src="img/customer-support.jpg" class="img-fluid illustration-img" alt="">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+
+                <!-- <div class="col-12 col-md-3 d-flex">
+                    <a href="/manageAttendance" class="text-decoration-none">
+                        <div class="card flex-fill border-0 illustration3">
+                            <div class="card-body p-0 d-flex flex-fill">
+                                <div class="row g-0 w-100">
+                                    <div class="col-6">
+                                        <div class="p-3 m-1">
+                                            <h4>Reports & Analytics</h4>
+                                            <p class="mb-0">Generate performance reports</p>
+                                        </div>
+                                    </div>
+                                    <div class="col-6 align-self-end text-end">
+                                        <img src="img/customer-support.jpg" class="img-fluid illustration-img" alt="">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </a>
+                </div> -->
+
+                <div class="col-12 col-md-3 d-flex">
+                    <a href="/messages" class="text-decoration-none">
+                        <div class="card flex-fill border-0 illustration">
+                            <div class="card-body p-0 d-flex flex-fill">
+                                <div class="row g-0 w-100">
+                                    <div class="col-6">
+                                        <div class="p-3 m-1">
+                                            <h4>Messages</h4>
+                                            <p class="mb-0">Receive messages on submitted Requests</p>
+                                        </div>
+                                    </div>
+                                    <div class="col-6 align-self-end text-end">
+                                        <img src="img/customer-support.jpg" class="img-fluid illustration-img" alt="">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+</div>

@@ -1,0 +1,17 @@
+body {
+    background-color: #f8f9fa;
+}
+
+.card {
+    border-radius: 0.5rem;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.table thead th {
+    background-color: #e9ecef;
+    color: #495057;
+}
+
+.table tbody tr:nth-child(odd) {
+    background-color: #f2f2f2;
+}

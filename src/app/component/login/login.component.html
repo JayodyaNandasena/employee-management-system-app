@@ -1,0 +1,38 @@
+<div class="container-fluid">
+    <div class="row h-100">
+
+        <div class="col-4 p-0">
+            <img src="img/login-image.png" alt="Churros" class="food-image">
+        </div>
+
+        <div class="col-8 align-centre p-4">
+            <div class="login-box w-100 h-100 bg-white p-4">
+                <h2 class="text-center fs-1">Log In</h2>
+                <div class="align-middle">
+                    <form [formGroup]="loginForm">
+                        <div class="form-group">
+                            <label for="username" class="my-3 fs-3">Username</label>
+                            <input type="text" formControlName="username" class="form-control my-3 fs-3" placeholder="Username">
+                            <p class="text-danger" *ngIf="loginForm.controls['username']['errors']
+                                && loginForm.controls['username'].errors['required']
+                                && loginForm.controls['username'].touched">Username Not Provided</p>
+                        </div>
+                        <div class="form-group">
+                            <label for="password" class="my-3 fs-3">Password</label>
+                            <input type="password" formControlName="password" class="form-control my-3 fs-3" placeholder="Password">
+                            <p class="text-danger" *ngIf="loginForm.controls['password']['errors']
+                                && loginForm.controls['password'].errors['required']
+                                && loginForm.controls['password'].touched">Password Not Provided</p>
+                        </div>
+                        <!-- <div class="d-flex justify-content-end">
+                            <a href="/assets/pages/reset-password.html" class="my-3 fs-4 text-black text-decoration-none forgot-password">Forgot Password?</a>
+                        </div> -->
+                        <div class="d-flex justify-content-center">
+                            <button (click)="login()" class="btn text-white my-3 fs-3 btn-login">Login</button>
+                        </div>
+                    </form>  
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
