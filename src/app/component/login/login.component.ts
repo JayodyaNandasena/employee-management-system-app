@@ -1,13 +1,14 @@
-import { Component } from '@angular/core';
-import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { SessionStorageService } from '../../services/session-storage.service';
-import { Router } from '@angular/router';
-import { LoginRequest } from '../../models/models';
-import { ToastrService } from 'ngx-toastr';
-import { NgIf } from '@angular/common';
-import { HttpClient, HttpClientModule } from '@angular/common/http';
-import { LoginService } from '../../services/login.service';
-import { AuthService } from '../../services/auth.service';
+import {Component} from '@angular/core';
+import {FormControl, FormGroup, ReactiveFormsModule, Validators} from '@angular/forms';
+import {SessionStorageService} from '../../services/session-storage.service';
+import {Router} from '@angular/router';
+import {LoginRequest} from '../../models/models';
+import {ToastrService} from 'ngx-toastr';
+import {NgIf} from '@angular/common';
+import {HttpClient, HttpClientModule} from '@angular/common/http';
+import {LoginService} from '../../services/login.service';
+import {AuthService} from '../../services/auth.service';
+import {UserRole} from '../../models/userRole';
 
 @Component({
   selector: 'app-login',
@@ -34,7 +35,8 @@ export class LoginComponent {
     private http: HttpClient,
     private readonly loginService: LoginService,
     private readonly authService: AuthService,
-    private toastr: ToastrService) { }
+    private toastr: ToastrService) {
+  }
 
   login() {
     this.request = {
@@ -48,19 +50,20 @@ export class LoginComponent {
           if (data.token) {
             localStorage.setItem("authToken", data.token);
 
-            this.toastr.success("Login Successful", "Welcome!", { timeOut: 4000 });
+            this.toastr.success("Login Successful", "Welcome!", {timeOut: 4000});
 
-            if (this.authService.getRole() === 'USER') {
+            const role: UserRole | null = this.authService.getRole();
+            if (role === UserRole.USER) {
               this.router.navigate(['/dashboardNonManager']);
             }
 
             this.router.navigateByUrl('/dashboardManager');
           } else {
-            this.toastr.error("Login Failed", "Invalid credentials", { timeOut: 3000 });
+            this.toastr.error("Login Failed", "Invalid credentials", {timeOut: 3000});
           }
         },
         error: () => {
-          this.toastr.error("Error", "Login Failed", { timeOut: 3000 });
+          this.toastr.error("Error", "Login Failed", {timeOut: 3000});
         }
       });
   }
