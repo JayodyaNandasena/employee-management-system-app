@@ -1,6 +1,6 @@
 export interface LoginRequest {
-    username: string,
-    password: string
+    username: string|null,
+    password: string|null
 }
 
 export interface EmployeeRead {

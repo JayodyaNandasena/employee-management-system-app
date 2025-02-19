@@ -5,11 +5,13 @@ import { Router } from '@angular/router';
 import { LoginRequest } from '../../models/models';
 import { ToastrService } from 'ngx-toastr';
 import { NgIf } from '@angular/common';
+import { HttpClient, HttpClientModule } from '@angular/common/http';
+import { LoginService } from '../../services/login.service';
 
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [NgIf, ReactiveFormsModule],
+  imports: [NgIf, ReactiveFormsModule,HttpClientModule],
   templateUrl: './login.component.html',
   styleUrl: './login.component.css'
 })
@@ -20,38 +22,38 @@ export class LoginComponent{
     password : new FormControl("",Validators.required)
   })
 
+  public request: LoginRequest = {
+    username: '',
+    password: ''
+  }
+
   constructor(
     private sessionStorageService: SessionStorageService,
     private router: Router,
-    private toastr: ToastrService) {}
+    private http: HttpClient,
+    private readonly loginService:LoginService,
+    private toastr: ToastrService) { }
 
-  
-  login(){
-    fetch("http://localhost:8081/login",{
-      method:'POST',
-      body: JSON.stringify(this.loginForm.value),
-      headers : {"Content-type": "application/json"}
-    })
-    .then(res => res.json())
-    .then(data=> {
-      if(data.status == true){
-        this.sessionStorageService.setEmployeeId(data.employeeDetails.employee.employeeId);
-        this.sessionStorageService.setEmployeeName(
-          data.employeeDetails.employee.firstName + " " + data.employeeDetails.employee.lastName);
-        this.sessionStorageService.setIsManager(data.employeeDetails.isManager);
-        console.log(this.sessionStorageService.getEmployeeId());
+  login() {
+    this.request = {
+      username: this.loginForm.controls.username?.value,
+      password: this.loginForm.controls.password?.value
+    }
 
-        if (data.employeeDetails.isManager) {
-          this.router.navigateByUrl('/dashboardManager');
-        } else {
-          this.router.navigate(['/dashboardNonManager']);
+    this.loginService.login(this.request)
+      .subscribe({
+        next: (data) => {
+          if (data.token) {
+            localStorage.setItem("authToken", data.token); // Store token
+            this.toastr.success("Login Successful", "Welcome!", { timeOut: 2000 });
+            //this.router.navigate(['/dashboard']); // Redirect on success
+          } else {
+            this.toastr.error("Login Failed", "Invalid credentials", { timeOut: 2000 });
+          }
+        },
+        error: () => {
+          this.toastr.error("Error", "Login Failed", { timeOut: 2000 });
         }
-
-      }else{
-        this.toastr.error(data.message, 'Login Failed',{
-          timeOut: 3000,
-        });
-      }
-    })
+      });
   }
 }
