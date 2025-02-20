@@ -1,0 +1,20 @@
+<aside id="sidebar" class="js-sidebar min-vh-100 position-fixed">
+  <div class="h-100">
+    <div class="sidebar-logo">
+      <a [routerLink]="dashboardLink">
+        Employee Management System
+      </a>
+    </div>
+    <ul class="sidebar-nav">
+      <li class="sidebar-item" *ngFor="let item of selectedSidebarItems">
+        <ng-container *ngIf="!item.separator">
+          <a [routerLink]="item.link" class="sidebar-link">
+            <i class="bi" [ngClass]="item.icon+ ' pe-2'"></i>
+            {{ item.label }}
+          </a>
+        </ng-container>
+        <hr *ngIf="item.separator">
+      </li>
+    </ul>
+  </div>
+</aside>
