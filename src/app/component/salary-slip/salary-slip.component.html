@@ -1,7 +1,6 @@
 <div class="row">
     <div class="col-3">
-        <app-sidebar-nonmanager *ngIf="!isManager"></app-sidebar-nonmanager>
-        <app-sidebar-admin *ngIf="isManager"></app-sidebar-admin>
+      <app-sidebar></app-sidebar>
     </div>
     <div class="col-9">
         <div class="container my-5">
@@ -61,7 +60,7 @@
                                     </table>
                                 </div>
                             </div>
-    
+
                             <!-- Totals Section -->
                             <h5 class="mb-3">Totals</h5>
                             <table class="table table-bordered">
@@ -79,7 +78,7 @@
                                         <td id="gross-salary">Rs. {{salary.grossSalary}}</td>
                                         </tr>
                                     <tr>   <td>Tax</td>
-                                        <td id="gross-salary">Rs. {{salary.grossSalary}}</td>   
+                                        <td id="gross-salary">Rs. {{salary.grossSalary}}</td>
                                     </tr>
                                 </tbody>
                             </table>

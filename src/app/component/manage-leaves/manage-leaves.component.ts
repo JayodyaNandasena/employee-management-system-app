@@ -1,15 +1,15 @@
 import { Component, OnInit } from '@angular/core';
-import { SidebarAdminComponent } from '../sidebar-admin/sidebar-admin.component';
 import { SessionStorageService } from '../../services/session-storage.service';
 import { ToastrService } from 'ngx-toastr';
 import { FormsModule } from '@angular/forms';
 import { CommonModule, DatePipe } from '@angular/common';
 import { Router } from '@angular/router';
+import {SidebarComponent} from "../sidebar/sidebar.component";
 
 @Component({
   selector: 'app-manage-leaves',
   standalone: true,
-  imports: [FormsModule, CommonModule, SidebarAdminComponent],
+    imports: [FormsModule, CommonModule, SidebarComponent],
   templateUrl: './manage-leaves.component.html',
   styleUrl: './manage-leaves.component.css'
 })

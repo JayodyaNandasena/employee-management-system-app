@@ -1,12 +1,12 @@
 import { Component, OnInit } from '@angular/core';
-import { SidebarAdminComponent } from '../sidebar-admin/sidebar-admin.component';
 import { ToastrService } from 'ngx-toastr';
 import { Router } from '@angular/router';
+import {SidebarComponent} from "../sidebar/sidebar.component";
 
 @Component({
   selector: 'app-dashboard-nonmanager',
   standalone: true,
-  imports: [SidebarAdminComponent],
+  imports: [ SidebarComponent],
   providers: [],
   templateUrl: './dashboard-manager.component.html',
   styleUrl: './dashboard-manager.component.css'
@@ -51,7 +51,7 @@ export class DashboardManagerComponent implements OnInit {
           timeout: 5000,
           maximumAge: 0
         };
-  
+
         navigator.geolocation.getCurrentPosition(
           (position) => {
             this.location = {
@@ -59,11 +59,11 @@ export class DashboardManagerComponent implements OnInit {
               longitude: position.coords.longitude
             };
             console.log(this.location.latitude + "," + this.location.longitude);
-            
+
             // Assign the values to AttendanceRequest
             this.AttendanceRequest.latitude = this.location.latitude;
             this.AttendanceRequest.longitude = this.location.longitude;
-  
+
             resolve(); // Resolve the promise
           },
           (error) => {
@@ -84,7 +84,7 @@ export class DashboardManagerComponent implements OnInit {
       .then(() => {
         this.AttendanceRequest.date = this.date;
         this.AttendanceRequest.time = this.time;
-  
+
         return fetch("http://localhost:8081/attendance/clockIn", {
           method: 'POST',
           body: JSON.stringify(this.AttendanceRequest),
@@ -112,7 +112,7 @@ export class DashboardManagerComponent implements OnInit {
       .then(() => {
         this.AttendanceRequest.date = this.date;
         this.AttendanceRequest.time = this.time;
-  
+
         return fetch("http://localhost:8081/attendance/clockOut", {
           method: 'POST',
           body: JSON.stringify(this.AttendanceRequest),

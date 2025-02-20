@@ -1,6 +1,6 @@
 <div class="row">
     <div class="col-3">
-        <app-sidebar-nonmanager></app-sidebar-nonmanager>
+      <app-sidebar></app-sidebar>
     </div>
     <div class="col-9">
         <main class="content px-3 py-2">
@@ -12,10 +12,10 @@
                     <div>
                         <label for="txt-ot-date" class="form-label">Date</label>
                         <input formControlName="date" type="date" id="txt-ot-date" class="form-control" />
-                        <p class="text-danger" *ngIf="otForm.controls['date']['errors'] 
+                        <p class="text-danger" *ngIf="otForm.controls['date']['errors']
                         && otForm.controls['date'].errors['required']
                         && otForm.controls['date'].touched">
-                            Date Not Provided</p>    
+                            Date Not Provided</p>
                     </div>
 
                     <div>
@@ -34,7 +34,7 @@
                     <p class="text-danger" *ngIf="otForm.controls['endTime'].status == 'INVALID'
                         && otForm.controls['endTime'].touched
                         ">End Time Not Provided</p>
-                    
+
                     <div class="mb-3">
                         <label for="reason" class="form-label">Reason</label>
                         <textarea formControlName="text" class="form-control" id="reason" name="reason" rows="3"></textarea>

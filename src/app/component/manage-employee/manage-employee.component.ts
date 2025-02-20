@@ -1,17 +1,16 @@
 import { Component, OnInit } from '@angular/core';
-import { SidebarNonmanagerComponent } from '../sidebar-nonmanager/sidebar-nonmanager.component';
-import { SidebarAdminComponent } from '../sidebar-admin/sidebar-admin.component';
 import { SessionStorageService } from '../../services/session-storage.service';
 import { CommonModule } from '@angular/common';
 import { ToastrService } from 'ngx-toastr';
 import { FormsModule } from '@angular/forms';
 import { Branch, EmployeeRead, JobRole } from '../../models/models';
 import { Router } from '@angular/router';
+import {SidebarComponent} from "../sidebar/sidebar.component";
 
 @Component({
   selector: 'app-manage-employee',
   standalone: true,
-  imports: [CommonModule, FormsModule, SidebarNonmanagerComponent, SidebarAdminComponent],
+    imports: [CommonModule, FormsModule, SidebarComponent],
   templateUrl: './manage-employee.component.html',
   styleUrl: './manage-employee.component.css'
 })
@@ -248,7 +247,7 @@ export class ManageEmployeeComponent implements OnInit {
       .catch(error => {
         this.toastr.error('System error', `Error: ${error.message}`);
       });
-    
+
   }
 
   onShiftTypeChange(event: any) {

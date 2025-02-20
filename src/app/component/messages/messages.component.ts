@@ -1,17 +1,16 @@
 import { Component, OnInit } from '@angular/core';
-import { SidebarNonmanagerComponent } from '../sidebar-nonmanager/sidebar-nonmanager.component';
-import { SidebarAdminComponent } from '../sidebar-admin/sidebar-admin.component';
 import { SessionStorageService } from '../../services/session-storage.service';
 import { CommonModule } from '@angular/common';
 import { ToastrService } from 'ngx-toastr';
 import { FormsModule } from '@angular/forms';
 import { EmployeeRead } from '../../models/models';
 import { Router } from '@angular/router';
+import {SidebarComponent} from "../sidebar/sidebar.component";
 
 @Component({
   selector: 'app-messages',
   standalone: true,
-  imports: [CommonModule, FormsModule, SidebarNonmanagerComponent,SidebarAdminComponent],
+    imports: [CommonModule, FormsModule, SidebarComponent],
   templateUrl: './messages.component.html',
   styleUrl: './messages.component.css'
 })
@@ -23,7 +22,7 @@ export class MessagesComponent implements OnInit{
     private sessionService:SessionStorageService,
     private toastr: ToastrService,
     private router: Router){}
-  
+
   ngOnInit(): void {
     this.isManager = this.sessionService.getIsManager();
     this.getMessageList();
@@ -45,5 +44,5 @@ export class MessagesComponent implements OnInit{
       }
     })
   }
-  
+
 }

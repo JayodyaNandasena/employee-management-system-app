@@ -1,15 +1,15 @@
 import { Component, OnInit } from '@angular/core';
-import { SidebarNonmanagerComponent } from '../sidebar-nonmanager/sidebar-nonmanager.component';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { SessionStorageService } from '../../services/session-storage.service';
 import { ToastrService } from 'ngx-toastr';
 import { Router } from '@angular/router';
 import { NgIf } from '@angular/common';
+import {SidebarComponent} from "../sidebar/sidebar.component";
 
 @Component({
   selector: 'app-request-ot',
   standalone: true,
-  imports: [ReactiveFormsModule, NgIf, SidebarNonmanagerComponent],
+    imports: [ReactiveFormsModule, NgIf, SidebarComponent],
   templateUrl: './request-ot.component.html',
   styleUrl: './request-ot.component.css'
 })

@@ -1,17 +1,16 @@
 import { Component, OnInit } from '@angular/core';
-import { SidebarNonmanagerComponent } from '../sidebar-nonmanager/sidebar-nonmanager.component';
-import { SidebarAdminComponent } from '../sidebar-admin/sidebar-admin.component';
 import { SessionStorageService } from '../../services/session-storage.service';
 import { CommonModule } from '@angular/common';
 import { ToastrService } from 'ngx-toastr';
 import { FormsModule } from '@angular/forms';
 import { EmployeeRead } from '../../models/models';
 import { Router } from '@angular/router';
+import {SidebarComponent} from "../sidebar/sidebar.component";
 
 @Component({
   selector: 'app-manage-attendance',
   standalone: true,
-  imports: [CommonModule, FormsModule, SidebarNonmanagerComponent,SidebarAdminComponent],
+  imports: [CommonModule, FormsModule, SidebarComponent],
   templateUrl: './manage-attendance.component.html',
   styleUrl: './manage-attendance.component.css'
 })

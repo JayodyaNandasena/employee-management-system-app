@@ -1,16 +1,15 @@
 import { Component, OnInit } from '@angular/core';
-import { SidebarAdminComponent } from '../sidebar-admin/sidebar-admin.component';
 import { SessionStorageService } from '../../services/session-storage.service';
 import { ToastrService } from 'ngx-toastr';
 import { FormsModule } from '@angular/forms';
 import { CommonModule, DatePipe } from '@angular/common';
-import { SidebarNonmanagerComponent } from '../sidebar-nonmanager/sidebar-nonmanager.component';
 import { Router } from '@angular/router';
+import {SidebarComponent} from "../sidebar/sidebar.component";
 
 @Component({
   selector: 'app-manage-ot',
   standalone: true,
-  imports: [FormsModule, CommonModule, SidebarAdminComponent, SidebarNonmanagerComponent],
+    imports: [FormsModule, CommonModule, SidebarComponent],
   templateUrl: './manage-ot.component.html',
   styleUrl: './manage-ot.component.css'
 })
@@ -96,7 +95,7 @@ export class ManageOtComponent implements OnInit {
 
   rejectRequest(requestId : string){
     console.log(requestId);
-    
+
     const request = {
       "managerId": this.sessionService.getEmployeeId(),
       "requestId": requestId,

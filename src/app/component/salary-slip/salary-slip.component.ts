@@ -1,17 +1,16 @@
 import { Component, OnInit } from '@angular/core';
-import { SidebarAdminComponent } from '../sidebar-admin/sidebar-admin.component';
 import { SessionStorageService } from '../../services/session-storage.service';
 import { ToastrService } from 'ngx-toastr';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
-import { SidebarNonmanagerComponent } from '../sidebar-nonmanager/sidebar-nonmanager.component';
 import { Salary } from '../../models/models';
 import { Router } from '@angular/router';
+import {SidebarComponent} from "../sidebar/sidebar.component";
 
 @Component({
   selector: 'app-salary-slip',
   standalone: true,
-  imports: [FormsModule, CommonModule, SidebarAdminComponent, SidebarNonmanagerComponent],
+    imports: [FormsModule, CommonModule, SidebarComponent],
   templateUrl: './salary-slip.component.html',
   styleUrl: './salary-slip.component.css'
 })
@@ -50,7 +49,7 @@ export class SalarySlipComponent implements OnInit{
     .then(data=> {
       if(data){
         console.log(data);
-        
+
         this.salary = {
           basicSalary : data.basicSalary,
           epfPercentage : data.epfPercentage,
