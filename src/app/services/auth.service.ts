@@ -70,4 +70,11 @@ export class AuthService {
     this.userRole = null;
     this.username = null;
   }
+
+  hasRole(roles: UserRole[]): boolean {
+    if (this.userRole) {
+      return roles.includes(this.userRole);
+    }
+    return false;
+  }
 }
