@@ -30,12 +30,12 @@ export class LoginComponent {
   }
 
   constructor(
-    private sessionStorageService: SessionStorageService,
-    private router: Router,
-    private http: HttpClient,
+    private readonly sessionStorageService: SessionStorageService,
+    private readonly router: Router,
+    private readonly http: HttpClient,
     private readonly loginService: LoginService,
     private readonly authService: AuthService,
-    private toastr: ToastrService) {
+    private readonly toastr: ToastrService) {
   }
 
   login() {
@@ -48,7 +48,7 @@ export class LoginComponent {
       .subscribe({
         next: (data) => {
           if (data.token) {
-            localStorage.setItem("authToken", data.token);
+            this.authService.setToken(data.token);
 
             this.toastr.success("Login Successful", "Welcome!", {timeOut: 4000});
 
