@@ -8,7 +8,6 @@ import {NgIf} from '@angular/common';
 import {HttpClient, HttpClientModule} from '@angular/common/http';
 import {LoginService} from '../../services/login.service';
 import {AuthService} from '../../services/auth.service';
-import {UserRole} from '../../models/userRole';
 
 @Component({
   selector: 'app-login',
@@ -52,12 +51,7 @@ export class LoginComponent {
 
             this.toastr.success("Login Successful", "Welcome!", {timeOut: 4000});
 
-            const role: UserRole | null = this.authService.getRole();
-            if (role === UserRole.USER) {
-              this.router.navigate(['/dashboardNonManager']);
-            }
-
-            this.router.navigateByUrl('/dashboardManager');
+            this.router.navigateByUrl('/dashboard');
           } else {
             this.toastr.error("Login Failed", "Invalid credentials", {timeOut: 3000});
           }

@@ -1,6 +1,4 @@
 import { Routes } from '@angular/router';
-import { DashboardManagerComponent } from './component/dashboard-manager/dashboard-manager.component';
-import { DashboardNonmanagerComponent } from './component/dashboard-nonmanager/dashboard-nonmanager.component';
 import { LoginComponent } from './component/login/login.component';
 import { ManageLeavesComponent } from './component/manage-leaves/manage-leaves.component';
 import { ManageOtComponent } from './component/manage-ot/manage-ot.component';
@@ -11,15 +9,12 @@ import { ManageEmployeeComponent } from './component/manage-employee/manage-empl
 import { SalarySlipComponent } from './component/salary-slip/salary-slip.component';
 import { ManageAttendanceComponent } from './component/manage-attendance/manage-attendance.component';
 import { MessagesComponent } from './component/messages/messages.component';
+import {DashboardComponent} from "./component/dashboard/dashboard.component";
 
 export const routes: Routes = [
     {
-        path:"dashboardManager",
-        component: DashboardManagerComponent
-    },
-    {
-        path:"dashboardNonManager",
-        component: DashboardNonmanagerComponent
+        path:"dashboard",
+        component: DashboardComponent
     },
     {
         path:"manageLeaves",
