@@ -10,6 +10,7 @@ export class AuthService {
   private token: string | null = null;
   private userRole: UserRole | null = null;
   private username: string | null = null;
+  private employeeId: string | null = null;
 
   constructor() {
     this.loadToken();
@@ -35,6 +36,7 @@ export class AuthService {
     if (!this.token) {
       this.userRole = null;
       this.username = null;
+      this.employeeId = null;
       return;
     }
 
@@ -42,6 +44,7 @@ export class AuthService {
       const decodedToken: Token = jwtDecode(this.token);
       this.userRole = decodedToken.role as UserRole;
       this.username = decodedToken.sub;
+      this.employeeId = decodedToken.id;
     } catch (error) {
       console.error('Invalid token', error);
       this.clearAuthData();
@@ -60,6 +63,10 @@ export class AuthService {
     return this.username;
   }
 
+  getEmployeeId(): string | null {
+    return this.employeeId;
+  }
+
   clearToken(): void {
     localStorage.removeItem("authToken");
     this.clearAuthData();
@@ -69,6 +76,7 @@ export class AuthService {
     this.token = null;
     this.userRole = null;
     this.username = null;
+    this.employeeId = null;
   }
 
   hasRole(roles: UserRole[]): boolean {
