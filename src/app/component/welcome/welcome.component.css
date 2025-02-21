@@ -1,0 +1,16 @@
+@media (min-width:768px) {
+  .content {
+    max-width: auto;
+    width: auto;
+  }
+}
+
+.card {
+  box-shadow: 0 0 .875rem 0 rgba(34, 46, 60, .05);
+  margin-bottom: 24px;
+}
+
+.illustration {
+  background-color: var(--bs-primary-bg-subtle);
+  color: var(--bs-emphasis-color);
+}

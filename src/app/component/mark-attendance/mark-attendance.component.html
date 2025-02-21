@@ -1,0 +1,16 @@
+<div class="card flex-fill border-0">
+  <div class="card-body py-4 bg-dark-subtle">
+    <div class="d-flex align-items-start">
+      <div class="flex-grow-1">
+        <div class="col-md-12 text-center">
+          <h4 class="mt-1 mb-3">Quickly mark your Attendance</h4>
+          <div id="currentDateTime" class="mb-3 text-dark">{{ currentDateTime }}</div>
+          <button class="btn btn-lg btn-primary m-3" id="signInBtn"
+                  (click)="clockIn()">Clock In</button>
+          <button class="btn btn-lg btn-danger m-3" id="signOutBtn"
+                  (click)="clockOut()">Clock Out</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
