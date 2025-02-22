@@ -1,4 +1,7 @@
-import {Component, OnInit} from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { EmployeeService } from "../../services/employee.service";
+import { AuthService } from "../../services/auth.service";
+import { ToastrService } from "ngx-toastr";
 
 @Component({
   selector: 'app-welcome',
@@ -8,21 +11,30 @@ import {Component, OnInit} from '@angular/core';
   styleUrl: './welcome.component.css'
 })
 export class WelcomeComponent implements OnInit {
-  employeeName: string | null | undefined;
-  date: string = '';
-  time: string = '';
-  currentDateTime: string = '';
+  employeeId: string | null = null;
+  employeeName: string | null = null;
+
+  constructor(
+    private readonly employeeService: EmployeeService,
+    private readonly authService: AuthService,
+    private readonly toastr: ToastrService,
+  ) {}
 
   ngOnInit() {
-    this.employeeName = sessionStorage.getItem('employeeName');
-    this.updateDateTime();
-    setInterval(() => this.updateDateTime(), 1000);
+    this.employeeId = this.authService.getEmployeeId();
+    if (this.employeeId) {
+      this.getEmployeeName();
+    }
   }
 
-  updateDateTime() {
-    const now = new Date();
-    this.date = now.toISOString().split('T')[0]; // Format: YYYY-MM-DD
-    this.time = now.toLocaleTimeString('en-CA', { hour12: false });
-    this.currentDateTime = `Date: ${this.date} Time: ${this.time}`;
+  getEmployeeName() {
+    this.employeeService.getNameById(this.employeeId).subscribe({
+      next: (data) => {
+        this.employeeName = data?.name ?? null;
+      },
+      error: () => {
+        this.toastr.error("Error", "Error fetching name", { timeOut: 3000 });
+      }
+    });
   }
 }
