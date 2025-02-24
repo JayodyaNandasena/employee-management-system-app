@@ -3,11 +3,11 @@ import {SessionStorageService} from '../../services/session-storage.service';
 import {ToastrService} from 'ngx-toastr';
 import {FormsModule} from '@angular/forms';
 import {CommonModule} from '@angular/common';
-import {Salary} from '../../models/models';
 import {Router} from '@angular/router';
 import {SidebarComponent} from "../sidebar/sidebar.component";
 import html2canvas from "html2canvas";
 import jsPDF from 'jspdf';
+import {Salary} from "../../models";
 
 @Component({
   selector: 'app-salary-slip',

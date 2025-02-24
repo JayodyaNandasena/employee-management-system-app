@@ -1,16 +1,16 @@
-import { Component, OnInit } from '@angular/core';
-import { SessionStorageService } from '../../services/session-storage.service';
-import { CommonModule } from '@angular/common';
-import { ToastrService } from 'ngx-toastr';
-import { FormsModule } from '@angular/forms';
-import { Branch, EmployeeRead, JobRole } from '../../models/models';
-import { Router } from '@angular/router';
+import {Component, OnInit} from '@angular/core';
+import {SessionStorageService} from '../../services/session-storage.service';
+import {CommonModule} from '@angular/common';
+import {ToastrService} from 'ngx-toastr';
+import {FormsModule} from '@angular/forms';
+import {Router} from '@angular/router';
 import {SidebarComponent} from "../sidebar/sidebar.component";
+import {Branch, EmployeeRead, JobRole} from "../../models";
 
 @Component({
   selector: 'app-manage-employee',
   standalone: true,
-    imports: [CommonModule, FormsModule, SidebarComponent],
+  imports: [CommonModule, FormsModule, SidebarComponent],
   templateUrl: './manage-employee.component.html',
   styleUrl: './manage-employee.component.css'
 })
@@ -61,15 +61,16 @@ export class ManageEmployeeComponent implements OnInit {
     },
     shiftType: '',
     shiftPolicies: [
-      { startTime: '', endTime: '', totalHours: '' },
-      { startTime: '', endTime: '', totalHours: '' }
+      {startTime: '', endTime: '', totalHours: ''},
+      {startTime: '', endTime: '', totalHours: ''}
     ]
   }
 
   constructor(
-    private sessionService: SessionStorageService,
-    private toastr: ToastrService,
-    private router: Router) { }
+    private readonly sessionService: SessionStorageService,
+    private readonly toastr: ToastrService,
+    private readonly router: Router) {
+  }
 
   ngOnInit(): void {
     this.isManager = this.sessionService.getIsManager();
@@ -81,7 +82,7 @@ export class ManageEmployeeComponent implements OnInit {
     this.employee.account.password = "";
     fetch("http://localhost:8081/employee/by-id?id=" + this.employee.employeeId, {
       method: 'GET',
-      headers: { "Content-type": "application/json" }
+      headers: {"Content-type": "application/json"}
     })
       .then(res => {
         if (!res.ok) {
@@ -127,7 +128,7 @@ export class ManageEmployeeComponent implements OnInit {
     fetch("http://localhost:8081/employee", {
       method: 'PUT',
       body: JSON.stringify(this.employee),
-      headers: { "Content-type": "application/json" }
+      headers: {"Content-type": "application/json"}
     })
       .then(res => res.json())
       .then(data => {
@@ -148,7 +149,7 @@ export class ManageEmployeeComponent implements OnInit {
     fetch("http://localhost:8081/employee", {
       method: 'POST',
       body: JSON.stringify(this.employee),
-      headers: { "Content-type": "application/json" }
+      headers: {"Content-type": "application/json"}
     })
       .then(res => res.json())
       .then(data => {
@@ -194,17 +195,17 @@ export class ManageEmployeeComponent implements OnInit {
     fetch("http://localhost:8081/branch", {
       method: 'POST',
       body: JSON.stringify(this.newBranch),
-      headers: { "Content-type": "application/json" }
+      headers: {"Content-type": "application/json"}
     })
-    .then(response => {
-      if (response.ok) {
-        return response.json();
-      } else {
-        return response.text().then(text => {
-          this.toastr.error('Duplicate Branch Name', 'Error');
-        });
-      }
-    })
+      .then(response => {
+        if (response.ok) {
+          return response.json();
+        } else {
+          return response.text().then(text => {
+            this.toastr.error('Duplicate Branch Name', 'Error');
+          });
+        }
+      })
       .then(data => {
         this.toastr.success('Success', 'Branch Added Successfully!', {
           timeOut: 3000,
@@ -227,7 +228,7 @@ export class ManageEmployeeComponent implements OnInit {
     fetch("http://localhost:8081/jobrole", {
       method: 'POST',
       body: JSON.stringify(this.newJobRole),
-      headers: { "Content-type": "application/json" }
+      headers: {"Content-type": "application/json"}
     })
       .then(response => {
         if (response.ok) {

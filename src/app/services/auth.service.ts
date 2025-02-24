@@ -1,14 +1,13 @@
 import {Injectable} from '@angular/core';
 import {jwtDecode} from 'jwt-decode';
-import {Token} from '../models/token';
-import {UserRole} from '../models/userRole';
+import {Token, UserRoles} from '../models';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
   private token: string | null = null;
-  private userRole: UserRole | null = null;
+  private userRole: UserRoles | null = null;
   private username: string | null = null;
   private employeeId: string | null = null;
 
@@ -42,7 +41,7 @@ export class AuthService {
 
     try {
       const decodedToken: Token = jwtDecode(this.token);
-      this.userRole = decodedToken.role as UserRole;
+      this.userRole = decodedToken.role as UserRoles;
       this.username = decodedToken.sub;
       this.employeeId = decodedToken.id;
     } catch (error) {
@@ -55,7 +54,7 @@ export class AuthService {
     return this.token;
   }
 
-  getRole(): UserRole | null {
+  getRole(): UserRoles | null {
     return this.userRole;
   }
 
@@ -79,7 +78,7 @@ export class AuthService {
     this.employeeId = null;
   }
 
-  hasRole(roles: UserRole[]): boolean {
+  hasRole(roles: UserRoles[]): boolean {
     if (this.userRole) {
       return roles.includes(this.userRole);
     }

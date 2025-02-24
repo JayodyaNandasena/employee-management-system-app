@@ -2,7 +2,7 @@ import {Component} from '@angular/core';
 import {FormControl, FormGroup, ReactiveFormsModule, Validators} from '@angular/forms';
 import {SessionStorageService} from '../../services/session-storage.service';
 import {Router} from '@angular/router';
-import {LoginRequest} from '../../models/models';
+import {LoginRequest} from '../../models/login.model';
 import {ToastrService} from 'ngx-toastr';
 import {NgIf} from '@angular/common';
 import {HttpClient, HttpClientModule} from '@angular/common/http';

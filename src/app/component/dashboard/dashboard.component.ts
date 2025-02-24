@@ -3,7 +3,7 @@ import {MarkAttendanceComponent} from "../mark-attendance/mark-attendance.compon
 import {NgClass, NgForOf} from "@angular/common";
 import {SidebarComponent} from "../sidebar/sidebar.component";
 import {WelcomeComponent} from "../welcome/welcome.component";
-import {UserRole} from "../../models/userRole";
+import {UserRoles} from "../../models";
 import {AuthService} from "../../services/auth.service";
 import {RouterLink} from "@angular/router";
 
@@ -43,7 +43,7 @@ export class DashboardComponent implements OnInit {
     ]
   };
 
-  role: UserRole | null = null;
+  role: UserRoles | null = null;
   selectedDashboardItems: any[] = [];
 
   constructor(private readonly authService: AuthService) {
@@ -52,7 +52,7 @@ export class DashboardComponent implements OnInit {
   ngOnInit() {
     this.role = this.authService.getRole();
 
-    if (this.role === UserRole.USER) {
+    if (this.role === UserRoles.USER) {
       this.selectedDashboardItems = this.dashboardItems.user;
       return;
     }

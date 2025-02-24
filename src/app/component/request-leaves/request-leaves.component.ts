@@ -1,36 +1,36 @@
-import { Component, OnInit } from '@angular/core';
-import { SessionStorageService } from '../../services/session-storage.service';
-import { CommonModule } from '@angular/common';
-import { ToastrService } from 'ngx-toastr';
-import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { Branch, EmployeeRead, LeaveRequest } from '../../models/models';
-import { Router } from '@angular/router';
+import {Component, OnInit} from '@angular/core';
+import {SessionStorageService} from '../../services/session-storage.service';
+import {CommonModule} from '@angular/common';
+import {ToastrService} from 'ngx-toastr';
+import {FormControl, FormGroup, ReactiveFormsModule, Validators} from '@angular/forms';
+import {Router} from '@angular/router';
 import {SidebarComponent} from "../sidebar/sidebar.component";
 
 @Component({
   selector: 'app-request-leaves',
   standalone: true,
-    imports: [CommonModule, ReactiveFormsModule, SidebarComponent],
+  imports: [CommonModule, ReactiveFormsModule, SidebarComponent],
   templateUrl: './request-leaves.component.html',
   styleUrl: './request-leaves.component.css'
 })
-export class RequestLeavesComponent implements OnInit{
+export class RequestLeavesComponent implements OnInit {
   public isManager: boolean = false;
 
   leaveForm = new FormGroup({
-    employeeId : new FormControl(this.sessionService.getEmployeeId()),
-    text : new FormControl("", Validators.required),
-    requestDateTime : new FormControl(new Date().toISOString()),
-    startDate : new FormControl("", Validators.required),
-    startTime : new FormControl("", Validators.required),
-    endDate : new FormControl("", Validators.required),
-    endTime : new FormControl("", Validators.required)
+    employeeId: new FormControl(this.sessionService.getEmployeeId()),
+    text: new FormControl("", Validators.required),
+    requestDateTime: new FormControl(new Date().toISOString()),
+    startDate: new FormControl("", Validators.required),
+    startTime: new FormControl("", Validators.required),
+    endDate: new FormControl("", Validators.required),
+    endTime: new FormControl("", Validators.required)
   })
 
   constructor(
-    private sessionService:SessionStorageService,
+    private sessionService: SessionStorageService,
     private router: Router,
-    private toastr: ToastrService){}
+    private toastr: ToastrService) {
+  }
 
   ngOnInit(): void {
     this.isManager = this.sessionService.getIsManager();
@@ -41,29 +41,29 @@ export class RequestLeavesComponent implements OnInit{
 
   }
 
-  submitRequest(){
+  submitRequest() {
 
-    fetch("http://localhost:8081/timeOff",{
-      method:'POST',
+    fetch("http://localhost:8081/timeOff", {
+      method: 'POST',
       body: JSON.stringify(this.leaveForm.value),
-      headers : {"Content-type": "application/json"}
+      headers: {"Content-type": "application/json"}
     })
-    .then(res => res.json())
-    .then(data=> {
-      if(data.status === true){
-        this.toastr.success('Request Sent Successfully', 'Success',{
-          timeOut: 3000,
-        });
+      .then(res => res.json())
+      .then(data => {
+        if (data.status === true) {
+          this.toastr.success('Request Sent Successfully', 'Success', {
+            timeOut: 3000,
+          });
 
-      }else{
-        this.toastr.error(data.message, 'Error',{
-          timeOut: 3000,
-        });
-      }
-    })
+        } else {
+          this.toastr.error(data.message, 'Error', {
+            timeOut: 3000,
+          });
+        }
+      })
   }
 
-  discardRequest(){
+  discardRequest() {
     this.leaveForm.reset();
   }
 

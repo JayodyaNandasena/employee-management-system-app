@@ -6,8 +6,7 @@ import {Router} from '@angular/router';
 import {SidebarComponent} from "../sidebar/sidebar.component";
 import {AttendanceService} from "../../services/attendance.service";
 import {AuthService} from "../../services/auth.service";
-import {UserRole} from "../../models/userRole";
-import {ReadAttendance} from "../../models/attendance.model";
+import {UserRoles, ReadAttendance} from "../../models";
 
 @Component({
   selector: 'app-manage-attendance',
@@ -30,9 +29,9 @@ export class ManageAttendanceComponent implements OnInit {
 
   ngOnInit(): void {
     this.isManager = this.authService.hasRole([
-      UserRole.DEPARTMENT_MANAGER,
-      UserRole.BRANCH_MANAGER,
-      UserRole.SUPER_ADMIN
+      UserRoles.DEPARTMENT_MANAGER,
+      UserRoles.BRANCH_MANAGER,
+      UserRoles.SUPER_ADMIN
     ]);
     this.loadUserRecords();
   }

@@ -1,5 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import {UserRole} from "../../models/userRole";
+import {UserRoles} from "../../models";
 import {AuthService} from "../../services/auth.service";
 import {RouterLink} from "@angular/router";
 import {NgClass, NgForOf, NgIf} from "@angular/common";
@@ -40,7 +40,7 @@ export class SidebarComponent implements OnInit {
     ]
   };
 
-  role: UserRole | null = null;
+  role: UserRoles | null = null;
   selectedSidebarItems: any[] = [];
   dashboardLink: string | null = null;
 
@@ -50,7 +50,7 @@ export class SidebarComponent implements OnInit {
   ngOnInit() {
     this.role = this.authService.getRole();
 
-    if (this.role === UserRole.USER) {
+    if (this.role === UserRoles.USER) {
       this.selectedSidebarItems = this.sidebarItems.user;
       this.dashboardLink = '/dashboardNonManager';
       return;
