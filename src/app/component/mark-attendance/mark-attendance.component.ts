@@ -1,8 +1,8 @@
-import { Component, OnInit } from '@angular/core';
-import { ToastrService } from "ngx-toastr";
-import { AttendanceService } from "../../services/attendance.service";
-import { AuthService } from "../../services/auth.service";
-import { CreateAttendance } from "../../models/create-attendance";
+import {Component, OnInit} from '@angular/core';
+import {ToastrService} from "ngx-toastr";
+import {AttendanceService} from "../../services/attendance.service";
+import {AuthService} from "../../services/auth.service";
+import {CreateAttendance} from "../../models/attendance.model";
 
 @Component({
   selector: 'app-mark-attendance',
@@ -40,7 +40,7 @@ export class MarkAttendanceComponent implements OnInit {
   private updateDateTime(): void {
     const now = new Date();
     this.date = now.toISOString().split('T')[0]; // Format: YYYY-MM-DD
-    this.time = now.toLocaleTimeString('en-CA', { hour12: false });
+    this.time = now.toLocaleTimeString('en-CA', {hour12: false});
     this.currentDateTime = `Date: ${this.date} Time: ${this.time}`;
 
     // Ensure the attendance request has updated date/time
@@ -71,7 +71,7 @@ export class MarkAttendanceComponent implements OnInit {
           this.attendanceRequest.longitude = 0.0;
           reject(new Error('Unable to fetch location.'));
         },
-        { enableHighAccuracy: true, timeout: 5000, maximumAge: 0 }
+        {enableHighAccuracy: true, timeout: 5000, maximumAge: 0}
       );
     });
   }

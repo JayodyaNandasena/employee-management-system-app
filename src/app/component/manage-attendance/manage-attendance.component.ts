@@ -6,8 +6,8 @@ import {Router} from '@angular/router';
 import {SidebarComponent} from "../sidebar/sidebar.component";
 import {AttendanceService} from "../../services/attendance.service";
 import {AuthService} from "../../services/auth.service";
-import {ReadAttendance} from "../../models/read-attendance";
 import {UserRole} from "../../models/userRole";
+import {ReadAttendance} from "../../models/attendance.model";
 
 @Component({
   selector: 'app-manage-attendance',

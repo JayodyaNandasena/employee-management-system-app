@@ -2,9 +2,7 @@ import {Injectable} from '@angular/core';
 import {environment} from "../environments/environment";
 import {HttpClient, HttpParams} from "@angular/common/http";
 import {Observable, of} from "rxjs";
-import {CreateAttendance} from "../models/create-attendance";
-import {AttendanceResponse} from "../models/attendance-response";
-import {ReadAttendance} from "../models/read-attendance";
+import {AttendanceResponse, CreateAttendance, ReadAttendance} from "../models/attendance.model";
 
 @Injectable({
   providedIn: 'root'
