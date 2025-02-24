@@ -1,13 +1,11 @@
 import {Component} from '@angular/core';
 import {FormControl, FormGroup, ReactiveFormsModule, Validators} from '@angular/forms';
-import {SessionStorageService} from '../../services/session-storage.service';
 import {Router} from '@angular/router';
-import {LoginRequest} from '../../models/login.model';
+import {LoginRequest} from '../../models';
 import {ToastrService} from 'ngx-toastr';
 import {NgIf} from '@angular/common';
 import {HttpClient, HttpClientModule} from '@angular/common/http';
-import {LoginService} from '../../services/login.service';
-import {AuthService} from '../../services/auth.service';
+import {LoginService, AuthService} from '../../services';
 
 @Component({
   selector: 'app-login',
@@ -29,7 +27,6 @@ export class LoginComponent {
   }
 
   constructor(
-    private readonly sessionStorageService: SessionStorageService,
     private readonly router: Router,
     private readonly http: HttpClient,
     private readonly loginService: LoginService,

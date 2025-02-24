@@ -4,8 +4,7 @@ import {ToastrService} from 'ngx-toastr';
 import {FormsModule} from '@angular/forms';
 import {Router} from '@angular/router';
 import {SidebarComponent} from "../sidebar/sidebar.component";
-import {AttendanceService} from "../../services/attendance.service";
-import {AuthService} from "../../services/auth.service";
+import {AttendanceService, AuthService} from "../../services";
 import {UserRoles, ReadAttendance} from "../../models";
 
 @Component({
