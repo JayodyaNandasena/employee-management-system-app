@@ -6,6 +6,7 @@ import {FormsModule} from '@angular/forms';
 import {Router} from '@angular/router';
 import {SidebarComponent} from "../sidebar/sidebar.component";
 import {Branch, EmployeeRead, JobRole} from "../../models";
+import {BranchService, JobRoleService} from "../../services";
 
 @Component({
   selector: 'app-manage-employee',
@@ -16,8 +17,8 @@ import {Branch, EmployeeRead, JobRole} from "../../models";
 })
 export class ManageEmployeeComponent implements OnInit {
   public isManager: boolean = false;
-  public jobTitlesList = null;
-  public branchList = null;
+  public jobTitlesList: string[] = [];
+  public branchList: string[] = [];
 
   public employee: EmployeeRead = {
     employeeId: "",
@@ -69,6 +70,8 @@ export class ManageEmployeeComponent implements OnInit {
   constructor(
     private readonly sessionService: SessionStorageService,
     private readonly toastr: ToastrService,
+    private readonly branchService: BranchService,
+    private readonly jobRoleService: JobRoleService,
     private readonly router: Router) {
   }
 
@@ -192,29 +195,22 @@ export class ManageEmployeeComponent implements OnInit {
   }
 
   addNewBranch() {
-    fetch("http://localhost:8081/branch", {
-      method: 'POST',
-      body: JSON.stringify(this.newBranch),
-      headers: {"Content-type": "application/json"}
-    })
-      .then(response => {
-        if (response.ok) {
-          return response.json();
-        } else {
-          return response.text().then(text => {
-            this.toastr.error('Duplicate Branch Name', 'Error');
+    this.branchService.persist(this.newBranch).subscribe({
+        next: (data) => {
+          if (!data) {
+            this.toastr.error('Duplicate Branch', 'Error');
+            return;
+          }
+          this.toastr.success('Success', 'Branch Added Successfully!', {
+            timeOut: 3000,
           });
+          this.loadBranchNames();
+        },
+        error: () => {
+          this.toastr.error("Error", "Error saving new branch", {timeOut: 3000});
         }
-      })
-      .then(data => {
-        this.toastr.success('Success', 'Branch Added Successfully!', {
-          timeOut: 3000,
-        });
-        this.loadBranchNames();
-      })
-      .catch(error => {
-        this.toastr.error('System error', 'Error');
-      });
+      }
+    );
   }
 
   addNewJobRole() {
@@ -225,30 +221,22 @@ export class ManageEmployeeComponent implements OnInit {
       totalHours: this.formatTime(policy.totalHours)
     }));
 
-    fetch("http://localhost:8081/jobrole", {
-      method: 'POST',
-      body: JSON.stringify(this.newJobRole),
-      headers: {"Content-type": "application/json"}
-    })
-      .then(response => {
-        if (response.ok) {
-          return response.json();
-        } else {
-          return response.text().then(text => {
+    this.jobRoleService.persist(this.newJobRole).subscribe({
+        next: (data) => {
+          if (!data) {
             this.toastr.error('Duplicate Job Role Title', 'Error');
+            return;
+          }
+          this.toastr.success('Success', 'Job Role Added Successfully!', {
+            timeOut: 3000,
           });
+          this.loadJobTitles();
+        },
+        error: () => {
+          this.toastr.error("Error", "Error saving new job role", {timeOut: 3000});
         }
-      })
-      .then(data => {
-        this.toastr.success('Success', 'Job Role Added Successfully!', {
-          timeOut: 3000,
-        });
-        this.loadJobTitles();
-      })
-      .catch(error => {
-        this.toastr.error('System error', `Error: ${error.message}`);
-      });
-
+      }
+    );
   }
 
   onShiftTypeChange(event: any) {
@@ -275,18 +263,24 @@ export class ManageEmployeeComponent implements OnInit {
   }
 
   loadBranchNames() {
-    fetch("http://localhost:8081/branch/all-names")
-      .then(res => res.json())
-      .then(data => {
-        this.branchList = data;
-      });
+    this.branchService.getAllNames().subscribe({
+      next: (data) => {
+        this.branchList = data || [];
+      },
+      error: () => {
+        this.toastr.error("Error", "Error fetching branch names", {timeOut: 3000});
+      }
+    });
   }
 
   loadJobTitles() {
-    fetch("http://localhost:8081/jobrole/titles")
-      .then(res => res.json())
-      .then(data => {
-        this.jobTitlesList = data;
-      });
+    this.jobRoleService.getAllTitles().subscribe({
+      next: (data) => {
+        this.jobTitlesList = data || [];
+      },
+      error: () => {
+        this.toastr.error("Error", "Error fetching job titles", {timeOut: 3000});
+      }
+    });
   }
 }
