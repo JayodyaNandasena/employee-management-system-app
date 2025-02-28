@@ -16,10 +16,11 @@ import {OverTimeApproval, OverTimeRequestRead} from "../../models/over-time.mode
   styleUrl: './manage-ot.component.css'
 })
 export class ManageOtComponent implements OnInit {
-  public userId: string | null = null;
-  public pendingList: OverTimeRequestRead[] | null = null;
-  public approvedList: OverTimeRequestRead[] | null = null;
-  public rejectedList: OverTimeRequestRead[] | null = null;
+  private userId: string | null = null;
+  protected pendingList: OverTimeRequestRead[] | null = null;
+  protected approvedList: OverTimeRequestRead[] | null = null;
+  protected rejectedList: OverTimeRequestRead[] | null = null;
+  protected readonly StatusEnum = StatusEnum;
 
   constructor(
     private readonly authService: AuthService,
@@ -137,6 +138,4 @@ export class ManageOtComponent implements OnInit {
       }
     });
   }
-
-  protected readonly StatusEnum = StatusEnum;
 }

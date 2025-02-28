@@ -16,10 +16,10 @@ import {StatusEnum, TimeOffApproval, TimeOffRequestRead} from "../../models";
 })
 export class ManageLeavesComponent implements OnInit {
   protected readonly StatusEnum = StatusEnum;
-  public pendingList: TimeOffRequestRead[] | null = [];
-  public approvedList: TimeOffRequestRead[] | null = [];
-  public rejectedList: TimeOffRequestRead[] | null = [];
-  public userId: string | null = null;
+  protected pendingList: TimeOffRequestRead[] | null = [];
+  protected approvedList: TimeOffRequestRead[] | null = [];
+  protected rejectedList: TimeOffRequestRead[] | null = [];
+  private userId: string | null = null;
 
   constructor(
     private readonly authService: AuthService,
