@@ -7,5 +7,6 @@ export * from './time-off.model';
 export * from './login.model';
 export * from './salary.model';
 export * from './token.model';
+export * from './message.model'
 
 export * from './enums'

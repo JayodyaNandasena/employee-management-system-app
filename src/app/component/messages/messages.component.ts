@@ -1,10 +1,11 @@
 import {Component, OnInit} from '@angular/core';
-import {SessionStorageService} from '../../services/session-storage.service';
 import {CommonModule} from '@angular/common';
 import {ToastrService} from 'ngx-toastr';
 import {FormsModule} from '@angular/forms';
 import {Router} from '@angular/router';
 import {SidebarComponent} from "../sidebar/sidebar.component";
+import {Message} from "../../models";
+import {AuthService, MessageService} from "../../services";
 
 @Component({
   selector: 'app-messages',
@@ -14,35 +15,44 @@ import {SidebarComponent} from "../sidebar/sidebar.component";
   styleUrl: './messages.component.css'
 })
 export class MessagesComponent implements OnInit {
-  public isManager: boolean = false;
-  public messages = null;
+  protected messages: Message[] = [];
 
   constructor(
-    private sessionService: SessionStorageService,
-    private toastr: ToastrService,
-    private router: Router) {
+    private readonly authService: AuthService,
+    private readonly messageService: MessageService,
+    private readonly toastr: ToastrService,
+    private readonly router: Router) {
   }
 
   ngOnInit(): void {
-    this.isManager = this.sessionService.getIsManager();
     this.getMessageList();
   }
 
   getMessageList() {
-    fetch("http://localhost:8081/messages?employeeId=" + this.sessionService.getEmployeeId(), {
-      method: 'GET',
-      headers: {"Content-type": "application/json"}
-    })
-      .then(res => res.json())
-      .then(data => {
-        if (data) {
-          this.messages = data;
-        } else {
-          this.toastr.error(data.message, 'Data Loading Failed', {
+    const userId = this.authService.getEmployeeId();
+
+    if (!userId) {
+      this.toastr.error('Error retrieving user ID', 'Error', {
+        timeOut: 3000,
+      });
+      return;
+    }
+
+    this.messageService.getMessageList(userId).subscribe({
+      next: (data) => {
+        if (data.length === 0) {
+          this.toastr.success('No messages', 'Success', {
             timeOut: 3000,
           });
+          return;
         }
-      })
+        this.messages = data;
+      },
+      error: (error) => {
+        this.toastr.error('System error', 'Error', {
+          timeOut: 3000,
+        });
+      }
+    });
   }
-
 }
