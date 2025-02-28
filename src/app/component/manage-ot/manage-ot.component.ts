@@ -1,135 +1,142 @@
-import { Component, OnInit } from '@angular/core';
-import { SessionStorageService } from '../../services/session-storage.service';
-import { ToastrService } from 'ngx-toastr';
-import { FormsModule } from '@angular/forms';
-import { CommonModule, DatePipe } from '@angular/common';
-import { Router } from '@angular/router';
+import {Component, OnInit} from '@angular/core';
+import {ToastrService} from 'ngx-toastr';
+import {FormsModule} from '@angular/forms';
+import {CommonModule} from '@angular/common';
+import {Router} from '@angular/router';
 import {SidebarComponent} from "../sidebar/sidebar.component";
+import {AuthService, OverTimeService} from "../../services";
+import {StatusEnum} from "../../models";
+import {OverTimeApproval, OverTimeRequestRead} from "../../models/over-time.model";
 
 @Component({
   selector: 'app-manage-ot',
   standalone: true,
-    imports: [FormsModule, CommonModule, SidebarComponent],
+  imports: [FormsModule, CommonModule, SidebarComponent],
   templateUrl: './manage-ot.component.html',
   styleUrl: './manage-ot.component.css'
 })
 export class ManageOtComponent implements OnInit {
-  public isManager: boolean = false;
-  public pendingList = null;
-  public approvedList = null;
-  public rejectedList = null;
+  public userId: string | null = null;
+  public pendingList: OverTimeRequestRead[] | null = null;
+  public approvedList: OverTimeRequestRead[] | null = null;
+  public rejectedList: OverTimeRequestRead[] | null = null;
 
   constructor(
-    private sessionService: SessionStorageService,
-    private toastr: ToastrService,
-    private datePipe: DatePipe,
-    private router: Router){}
+    private readonly authService: AuthService,
+    private readonly overTimeService: OverTimeService,
+    private readonly toastr: ToastrService,
+    private readonly router: Router) {
+  }
 
   ngOnInit(): void {
-    this.isManager = this.sessionService.getIsManager();
+    this.userId = this.authService.getEmployeeId();
+
     this.loadPendingRequests();
     this.loadApprovedRequests();
     this.loadRejectedRequests();
   }
 
-  loadPendingRequests(){
-    fetch("http://localhost:8081/overtime/byStatus?status=PENDING&requestorId="+this.sessionService.getEmployeeId())
-      .then(res => res.json())
-      .then(data => {
-        this.pendingList = data;
+  loadPendingRequests() {
+    if (!this.userId) {
+      this.toastr.error('Error retrieving user ID', 'Error', {
+        timeOut: 3000,
       });
+      return;
+    }
+
+    this.overTimeService.loadRequestsByStatus(this.userId, StatusEnum.PENDING).subscribe({
+      next: (data) => {
+        if (data) {
+          this.pendingList = data;
+        }
+      },
+      error: () => {
+        this.toastr.error('Error retrieving pending request list', 'Error', {
+          timeOut: 3000,
+        });
+      }
+    });
   }
 
-  loadApprovedRequests(){
-    fetch("http://localhost:8081/overtime/byStatus?status=APPROVED&requestorId="+this.sessionService.getEmployeeId())
-      .then(res => res.json())
-      .then(data => {
-        this.approvedList = data;
+  loadApprovedRequests() {
+    if (!this.userId) {
+      this.toastr.error('Error retrieving user ID', 'Error', {
+        timeOut: 3000,
       });
+      return;
+    }
+
+    this.overTimeService.loadRequestsByStatus(this.userId, StatusEnum.APPROVED).subscribe({
+      next: (data) => {
+        if (data) {
+          this.approvedList = data;
+        }
+      },
+      error: () => {
+        this.toastr.error('Error retrieving approved request list', 'Error', {
+          timeOut: 3000,
+        });
+      }
+    });
   }
 
-  loadRejectedRequests(){
-    fetch("http://localhost:8081/overtime/byStatus?status=REJECTED&requestorId="+this.sessionService.getEmployeeId())
-      .then(res => res.json())
-      .then(data => {
-        this.rejectedList = data;
+  loadRejectedRequests() {
+    if (!this.userId) {
+      this.toastr.error('Error retrieving user ID', 'Error', {
+        timeOut: 3000,
       });
+      return;
+    }
+
+    this.overTimeService.loadRequestsByStatus(this.userId, StatusEnum.REJECTED).subscribe({
+      next: (data) => {
+        if (data) {
+          this.rejectedList = data;
+        }
+      },
+      error: () => {
+        this.toastr.error('Error retrieving rejected request list', 'Error', {
+          timeOut: 3000,
+        });
+      }
+    });
   }
 
-  aproveRequest(requestId : string){
-    const request = {
-      "managerId": this.sessionService.getEmployeeId(),
+  manageRequest(requestId: string, status:StatusEnum) {
+    if (!this.userId){
+      this.toastr.error('Error retrieving user ID', 'Error', {
+        timeOut: 3000,
+      });
+      return;
+    }
+
+    const request:OverTimeApproval = {
+      "managerId": this.userId,
       "requestId": requestId,
-      "status": "APPROVED",
+      "status": status,
       "approvedDateTime": new Date().toISOString()
     };
 
-    fetch("http://localhost:8081/overtime", {
-      method: 'PUT',
-      body: JSON.stringify(request),
-      headers: { "Content-type": "application/json" }
-    })
-      .then(res => res.json())
-      .then(data => {
-        if (data) {
-          if(data.status === true){
-            this.toastr.success(data.message, 'Success', {
-              timeOut: 3000,
-            });
-            this.loadApprovedRequests();
-            this.loadRejectedRequests();
-            this.loadPendingRequests();
-          }
+    this.overTimeService.manageRequests(request).subscribe({
+      next: (data) => {
+        if (data.status) {
+          this.toastr.success(data.message, 'Success', {
+            timeOut: 3000,
+          });
+          this.loadApprovedRequests();
+          this.loadRejectedRequests();
+          this.loadPendingRequests();
         } else {
           this.toastr.error(data.message, 'Failed', {
             timeOut: 3000,
           });
         }
-      })
-      .catch(error => {
-        this.toastr.warning('System error', 'Error');
-      });
-
-
+      },
+      error: () => {
+        this.toastr.error('System error', 'Error');
+      }
+    });
   }
 
-  rejectRequest(requestId : string){
-    console.log(requestId);
-
-    const request = {
-      "managerId": this.sessionService.getEmployeeId(),
-      "requestId": requestId,
-      "status": "REJECTED",
-      "approvedDateTime": new Date().toISOString()
-    };
-
-    fetch("http://localhost:8081/overtime", {
-      method: 'PUT',
-      body: JSON.stringify(request),
-      headers: { "Content-type": "application/json" }
-    })
-      .then(res => res.json())
-      .then(data => {
-        if (data) {
-          if(data.status === true){
-            this.toastr.success(data.message, 'Success', {
-              timeOut: 3000,
-            });
-            this.loadApprovedRequests();
-            this.loadRejectedRequests();
-            this.loadPendingRequests();
-          }
-        } else {
-          this.toastr.error(data.message, 'Failed', {
-            timeOut: 3000,
-          });
-        }
-      })
-      .catch(error => {
-        this.toastr.warning('System error', 'Error');
-      });
-
-
-  }
-
+  protected readonly StatusEnum = StatusEnum;
 }

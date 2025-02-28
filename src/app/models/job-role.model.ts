@@ -1,4 +1,4 @@
-import {LeavePolicy} from "./leave.model";
+import {LeavePolicy} from "./time-off.model";
 import {SalaryPolicy} from "./salary.model";
 import {ShiftPolicy} from "./job-shift.model";
 
