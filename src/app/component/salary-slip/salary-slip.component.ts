@@ -1,5 +1,4 @@
 import {Component, OnInit} from '@angular/core';
-import {SessionStorageService} from '../../services/session-storage.service';
 import {ToastrService} from 'ngx-toastr';
 import {FormsModule} from '@angular/forms';
 import {CommonModule} from '@angular/common';
@@ -8,6 +7,7 @@ import {SidebarComponent} from "../sidebar/sidebar.component";
 import html2canvas from "html2canvas";
 import jsPDF from 'jspdf';
 import {Salary} from "../../models";
+import {AuthService, SalaryService} from "../../services";
 
 @Component({
   selector: 'app-salary-slip',
@@ -17,7 +17,6 @@ import {Salary} from "../../models";
   styleUrl: './salary-slip.component.css'
 })
 export class SalarySlipComponent implements OnInit {
-  public isManager: boolean = false;
   public salary: Salary = {
     basicSalary: 0,
     epfPercentage: 0,
@@ -33,45 +32,36 @@ export class SalarySlipComponent implements OnInit {
   };
 
   constructor(
-    private sessionService: SessionStorageService,
-    private router: Router,
-    private toastr: ToastrService) {
+    private readonly authService: AuthService,
+    private readonly salaryService: SalaryService,
+    private readonly router: Router,
+    private readonly toastr: ToastrService) {
   }
 
   ngOnInit(): void {
-    this.isManager = this.sessionService.getIsManager();
     this.loadSalarySlip();
   }
 
   loadSalarySlip() {
-    fetch("http://localhost:8081/salary?employeeId=" + this.sessionService.getEmployeeId(), {
-      method: 'POST',
-      headers: {"Content-type": "application/json"}
-    })
-      .then(res => res.json())
-      .then(data => {
-        if (data) {
-          console.log(data);
+    const userId: string | null = this.authService.getEmployeeId();
 
-          this.salary = {
-            basicSalary: data.basicSalary,
-            epfPercentage: data.epfPercentage,
-            epfAmount: data.epfAmount,
-            etfPercentage: data.etfPercentage,
-            etfAmount: data.etfAmount,
-            otHours: data.otHours,
-            otPerHour: data.otPerHour,
-            grossOTIncome: data.grossOTIncome,
-            grossEarnings: data.grossEarnings,
-            grossDeductions: data.grossDeductions,
-            grossSalary: data.grossSalary
-          };
-        } else {
-          this.toastr.error(data.message, 'Data Loading Failed', {
-            timeOut: 3000,
-          });
-        }
-      })
+    if (!userId) {
+      this.toastr.error('Error', 'Error retrieving user ID', {
+        timeOut: 3000,
+      });
+      return;
+    }
+
+    this.salaryService.getSalary(userId).subscribe({
+      next: (data) => {
+        this.salary = data;
+      },
+      error: () => {
+        this.toastr.error('Error', 'Error fetching salary', {
+          timeOut: 3000,
+        });
+      }
+    });
   }
 
   downloadPDF() {

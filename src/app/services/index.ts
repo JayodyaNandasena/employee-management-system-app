@@ -7,5 +7,6 @@ export * from './login.service'
 export * from './time-off.service'
 export * from './over-time.service'
 export * from './message.service'
+export * from './salary.service'
 
 
