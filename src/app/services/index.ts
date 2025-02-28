@@ -4,5 +4,6 @@ export * from './branch.service'
 export * from './employee.service'
 export * from './job-role.service'
 export * from './login.service'
+export * from './time-off.service'
 
 
