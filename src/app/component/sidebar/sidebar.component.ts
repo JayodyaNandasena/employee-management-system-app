@@ -1,7 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {UserRoles} from "../../models";
-import {AuthService} from "../../services/auth.service";
-import {RouterLink} from "@angular/router";
+import {AuthService} from "../../services";
+import {RouterLink, Router} from "@angular/router";
 import {NgClass, NgForOf, NgIf} from "@angular/common";
 
 @Component({
@@ -44,7 +44,10 @@ export class SidebarComponent implements OnInit {
   selectedSidebarItems: any[] = [];
   dashboardLink: string | null = null;
 
-  constructor(private readonly authService: AuthService) {
+  constructor(
+    private readonly authService: AuthService,
+    private readonly router: Router
+  ) {
   }
 
   ngOnInit() {
@@ -58,5 +61,10 @@ export class SidebarComponent implements OnInit {
 
     this.selectedSidebarItems = this.sidebarItems.manager;
     this.dashboardLink = '/dashboardManager';
+  }
+
+  logout() {
+    this.authService.clearToken();
+    this.router.navigate(['']);
   }
 }
