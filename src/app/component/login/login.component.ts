@@ -38,7 +38,7 @@ export class LoginComponent {
     this.request = {
       username: this.loginForm.controls.username?.value,
       password: this.loginForm.controls.password?.value
-    }
+    };
 
     this.loginService.login(this.request)
       .subscribe({
@@ -46,16 +46,21 @@ export class LoginComponent {
           if (data.token) {
             this.authService.setToken(data.token);
 
-            this.toastr.success("Login Successful", "Welcome!", {timeOut: 4000});
+            this.toastr.success("Login Successful", "Welcome!", { timeOut: 4000 });
 
             this.router.navigateByUrl('/dashboard');
           } else {
-            this.toastr.error("Login Failed", "Invalid credentials", {timeOut: 3000});
+            this.toastr.error("Login Failed", "Invalid credentials", { timeOut: 3000 });
           }
         },
-        error: () => {
-          this.toastr.error("Error", "Login Failed", {timeOut: 3000});
+        error: (error) => {
+          if (error.status === 401) {
+            this.toastr.error("Invalid Credentials", "Please check your username and password", { timeOut: 3000 });
+          } else {
+            this.toastr.error("Error", "Login Failed. Please try again later.", { timeOut: 3000 });
+          }
         }
       });
   }
+
 }

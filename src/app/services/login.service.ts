@@ -1,5 +1,5 @@
 import {environment} from '../environments/environment';
-import {HttpClient} from '@angular/common/http';
+import {HttpClient, HttpHeaders} from '@angular/common/http';
 import {Injectable} from '@angular/core';
 import {LoginRequest} from "../models";
 
@@ -12,9 +12,12 @@ export class LoginService {
   }
 
   login(request: LoginRequest) {
-    return this.http.post<{
-      token: string,
-      expiresIn: number
-    }>(`${environment.baseUrl}/auth/login`, request, {responseType: "json"});
+    const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
+    return this.http.post<{ token: string, expiresIn: number }>(
+      `${environment.baseUrl}/auth/login`,
+      request,
+      { headers: headers, responseType: 'json' }
+    );
   }
+
 }
