@@ -3,6 +3,7 @@ import {UserRoles} from "../../models";
 import {AuthService} from "../../services";
 import {RouterLink, Router} from "@angular/router";
 import {NgClass, NgForOf, NgIf} from "@angular/common";
+import {ToastrService} from "ngx-toastr";
 
 @Component({
   selector: 'app-sidebar',
@@ -42,11 +43,11 @@ export class SidebarComponent implements OnInit {
 
   role: UserRoles | null = null;
   selectedSidebarItems: any[] = [];
-  dashboardLink: string | null = null;
 
   constructor(
     private readonly authService: AuthService,
-    private readonly router: Router
+    private readonly router: Router,
+    private readonly toastr: ToastrService
   ) {
   }
 
@@ -55,16 +56,16 @@ export class SidebarComponent implements OnInit {
 
     if (this.role === UserRoles.USER) {
       this.selectedSidebarItems = this.sidebarItems.user;
-      this.dashboardLink = '/dashboardNonManager';
       return;
     }
 
     this.selectedSidebarItems = this.sidebarItems.manager;
-    this.dashboardLink = '/dashboardManager';
   }
 
   logout() {
     this.authService.clearToken();
+    this.toastr.success('You have logged out. See you again soon!', 'Logged Out', {timeOut: 5000});
     this.router.navigate(['']);
   }
+
 }
