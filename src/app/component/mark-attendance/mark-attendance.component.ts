@@ -1,8 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {ToastrService} from "ngx-toastr";
-import {AttendanceService} from "../../services/attendance.service";
-import {AuthService} from "../../services/auth.service";
-import {CreateAttendance} from "../../models/attendance.model";
+import {AttendanceService, AuthService} from "../../services";
+import {CreateAttendance} from "../../models";
 
 @Component({
   selector: 'app-mark-attendance',
@@ -61,17 +60,25 @@ export class MarkAttendanceComponent implements OnInit {
             latitude: position.coords.latitude,
             longitude: position.coords.longitude
           };
+          console.log(`latitude: ${position.coords.latitude}, longitude: ${position.coords.longitude}`);
           this.attendanceRequest.latitude = this.location.latitude;
           this.attendanceRequest.longitude = this.location.longitude;
           resolve();
         },
         (error) => {
-          this.toastr.error('Unable to fetch location.', 'Error');
-          this.attendanceRequest.latitude = 0.0;
-          this.attendanceRequest.longitude = 0.0;
-          reject(new Error('Unable to fetch location.'));
+          let errorMsg = 'Unable to fetch location.';
+          if (error.code === error.PERMISSION_DENIED) {
+            errorMsg = 'Location access denied. Please enable location services.';
+          } else if (error.code === error.TIMEOUT) {
+            errorMsg = 'Location request timed out. Please try again in an open area.';
+          } else if (error.code === error.POSITION_UNAVAILABLE) {
+            errorMsg = 'Location information is unavailable. Try again later.';
+          }
+
+          this.toastr.error(errorMsg, 'Error');
+          reject(new Error(errorMsg)); // Stop execution
         },
-        {enableHighAccuracy: true, timeout: 5000, maximumAge: 0}
+        { enableHighAccuracy: true, timeout: 10000, maximumAge: 0 }
       );
     });
   }
@@ -79,10 +86,7 @@ export class MarkAttendanceComponent implements OnInit {
   private submitAttendance(action: 'clockIn' | 'clockOut'): void {
     this.getCurrentLocation()
       .then(() => {
-        const request =
-          this.attendanceService[action](this.attendanceRequest);
-
-        request.subscribe({
+        this.attendanceService[action](this.attendanceRequest).subscribe({
           next: (data) => {
             if (data) {
               data.status
@@ -90,8 +94,26 @@ export class MarkAttendanceComponent implements OnInit {
                 : this.toastr.warning(data.message, 'Failed');
             }
           },
-          error: () => this.toastr.error('A system error occurred', 'Error')
+          error: (err) => {
+            let errorMessage = 'A system error occurred. Please try again later.';
+
+            if (err.status === 403) {
+              errorMessage = 'Location mismatch: You must clock in within 1 km of your branch.';
+            } else if (err.status === 404) {
+              errorMessage = 'Employee record not found. Please contact HR.';
+            } else if (err.status === 409) {
+              errorMessage = 'You have already clocked in for today.';
+            } else if (err.error?.message) {
+              errorMessage = err.error.message;
+            }
+
+            this.toastr.error(errorMessage, 'Error');
+          }
         });
+      })
+      .catch((err) => {
+        this.toastr.error('Location access denied. Please enable GPS.', 'Error');
+        // Prevent API call if geolocation fails
       });
   }
 
