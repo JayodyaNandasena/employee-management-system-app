@@ -69,7 +69,7 @@
                                     {{jobTitle}}
                                 </option>
                             </select>
-                            <button class="btn btn-outline-primary" data-bs-toggle="modal"
+                            <button *ngIf="isSuperAdmin" class="btn btn-outline-primary" data-bs-toggle="modal"
                                 data-bs-target="#staticBackdrop2">Add new Job Role</button>
                         </div>
                         <div class="col-md-4">
@@ -79,7 +79,7 @@
                                     {{branch}}
                                 </option>
                             </select>
-                            <button class="btn btn-outline-primary" data-bs-toggle="modal"
+                            <button *ngIf="isSuperAdmin" class="btn btn-outline-primary" data-bs-toggle="modal"
                                 data-bs-target="#staticBackdrop">Add new Branch</button>
                         </div>
                         <div class="col-md-4">

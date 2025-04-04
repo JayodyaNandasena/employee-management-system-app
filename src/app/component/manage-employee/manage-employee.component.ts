@@ -5,8 +5,8 @@ import {ToastrService} from 'ngx-toastr';
 import {FormsModule} from '@angular/forms';
 import {Router} from '@angular/router';
 import {SidebarComponent} from "../sidebar/sidebar.component";
-import {Branch, EmployeeRead, JobRole} from "../../models";
-import {BranchService, JobRoleService} from "../../services";
+import {Branch, EmployeeRead, JobRole, UserRoles} from "../../models";
+import {AuthService, BranchService, EmployeeService, JobRoleService} from "../../services";
 
 @Component({
   selector: 'app-manage-employee',
@@ -17,6 +17,7 @@ import {BranchService, JobRoleService} from "../../services";
 })
 export class ManageEmployeeComponent implements OnInit {
   public isManager: boolean = false;
+  protected isSuperAdmin: boolean = false;
   public jobTitlesList: string[] = [];
   public branchList: string[] = [];
 
@@ -72,57 +73,51 @@ export class ManageEmployeeComponent implements OnInit {
     private readonly toastr: ToastrService,
     private readonly branchService: BranchService,
     private readonly jobRoleService: JobRoleService,
+    private readonly employeeService: EmployeeService,
+    private readonly authService:AuthService,
     private readonly router: Router) {
   }
 
   ngOnInit(): void {
     this.isManager = this.sessionService.getIsManager();
+    this.isSuperAdmin = this.authService.hasRole([UserRoles.SUPER_ADMIN]);
     this.loadBranchNames();
     this.loadJobTitles();
   }
 
   searchEmployee() {
+    // Ensure account object exists before modifying password
+    if (!this.employee.account) {
+      this.employee.account = {
+        username:"",
+        password:"",
+        isManager: false
+      };
+    }
     this.employee.account.password = "";
-    fetch("http://localhost:8081/employee/by-id?id=" + this.employee.employeeId, {
-      method: 'GET',
-      headers: {"Content-type": "application/json"}
-    })
-      .then(res => {
-        if (!res.ok) {
-          this.toastr.error('Error', 'Employee Not Found', {
-            timeOut: 1000,
-          });
+
+    this.employeeService.getById(this.employee.employeeId).subscribe({
+      next: (data) => {
+        if (data) {
+          Object.assign(this.employee, data);
+          if (data.account) {
+            this.employee.account = { ...data.account };
+            this.employee.account.password = "";
+          }
         }
-        return res.json();
-      })
-      .then(data => {
-        if (!data || !data.employeeId) {
+      },
+      error: (error) => {
+        if (error.status === 404) {
           this.toastr.error('Error', 'Employee Not Found', {
-            timeOut: 2000,
+            timeOut: 3000,
           });
         } else {
-          this.employee.employeeId = data.employeeId;
-          this.employee.firstName = data.firstName;
-          this.employee.lastName = data.lastName;
-          this.employee.nic = data.nic;
-          this.employee.dob = data.dob;
-          this.employee.hiredDate = data.hiredDate;
-          this.employee.address = data.address;
-          this.employee.email = data.email;
-          this.employee.gender = data.gender;
-          this.employee.branchName = data.branchName;
-          this.employee.jobRoleTitle = data.jobRoleTitle;
-          this.employee.account.username = data.account.username;
-          this.employee.account.isManager = data.account.isManager;
+          this.toastr.error('Error', 'System error', {
+            timeOut: 2000,
+          });
         }
-      })
-      .catch(error => {
-        this.toastr.warning('Error', 'Data Loading Failed', {
-          timeOut: 4000,
-        });
-      });
-
-
+      }
+    });
   }
 
   updateEmployee() {
