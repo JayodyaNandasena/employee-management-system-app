@@ -18,11 +18,13 @@
               <label for="firstName" class="form-label">First Name</label>
               <input type="text" class="form-control" id="firstName"
                      [(ngModel)]="employeeProfile.firstName"/>
+              <p class="text-danger" *ngIf="isInvalidFirstName">First name is required</p>
             </div>
             <div class="col-md-4">
               <label for="lastName" class="form-label">Last Name</label>
               <input type="text" class="form-control" id="lastName"
                      [(ngModel)]="employeeProfile.lastName"/>
+              <p class="text-danger" *ngIf="isInvalidLastName">Last name is required</p>
             </div>
           </div>
           <div class="row mb-3">
@@ -44,11 +46,13 @@
               <label for="email" class="form-label">Email</label>
               <input type="email" class="form-control" id="email"
                      [(ngModel)]="employeeProfile.email"/>
+              <p class="text-danger" *ngIf="isInvalidEmail">Email is required and should be a valid email</p>
             </div>
             <div class="col-md-6">
               <label for="address" class="form-label">Address</label>
               <input type="text" class="form-control" id="address"
                      [(ngModel)]="employeeProfile.address"/>
+              <p class="text-danger" *ngIf="isInvalidAddress">Address is required</p>
             </div>
           </div>
           <!-- <div class="row mb-3">

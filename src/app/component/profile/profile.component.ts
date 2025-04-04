@@ -1,21 +1,25 @@
 import {Component, OnInit} from '@angular/core';
 import {CommonModule} from '@angular/common';
 import {ToastrService} from 'ngx-toastr';
-import {FormControl, FormGroup, FormsModule, Validators} from '@angular/forms';
 import {Router} from '@angular/router';
 import {SidebarComponent} from "../sidebar/sidebar.component";
 import {EmployeeCreate, EmployeeRead, EmployeeUpdate, UserRoles} from "../../models";
 import {AuthService, EmployeeService} from "../../services";
+import {FormsModule} from "@angular/forms";
 
 @Component({
   selector: 'app-profile',
   standalone: true,
-  imports: [CommonModule, FormsModule, SidebarComponent],
+  imports: [CommonModule, SidebarComponent, FormsModule],
   templateUrl: './profile.component.html',
   styleUrl: './profile.component.css'
 })
 export class ProfileComponent implements OnInit {
   public isManager: boolean = false;
+  public isInvalidFirstName: boolean = false;
+  public isInvalidLastName: boolean = false;
+  public isInvalidEmail: boolean = false;
+  public isInvalidAddress: boolean = false;
 
   public employeeProfile: EmployeeRead = {
     employeeId: "",
@@ -101,6 +105,12 @@ export class ProfileComponent implements OnInit {
       return;
     }
 
+    this.validateData();
+
+    if (this.isInvalidFirstName || this.isInvalidLastName || this.isInvalidEmail || this.isInvalidAddress) {
+      return;
+    }
+
     this.employeeUpdate = {
       ...this.employeeProfile,
       employeeId: this.employeeProfile.employeeId || '',
@@ -134,6 +144,13 @@ export class ProfileComponent implements OnInit {
   get formattedGender(): string {
     const gender = this.employeeProfile.gender;
     return gender ? gender.charAt(0).toUpperCase() + gender.slice(1).toLowerCase() : '';
+  }
+
+  validateData(): void {
+    this.isInvalidFirstName = (this.employeeProfile.firstName == null || this.employeeProfile.firstName == "");
+    this.isInvalidLastName = (this.employeeProfile.lastName == null || this.employeeProfile.lastName == "");
+    this.isInvalidAddress = (this.employeeProfile.address == null || this.employeeProfile.address == "");
+    this.isInvalidEmail = (this.employeeProfile.email == null || this.employeeProfile.email == "" || !/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(this.employeeProfile.email));
   }
 
 }
