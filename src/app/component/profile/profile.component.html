@@ -1,107 +1,91 @@
 <div class="row">
-    <div class="col-3">
-      <app-sidebar></app-sidebar>
-    </div>
-    <div class="col-9">
-        <div class="container-fluid">
-            <div class="row">
-                <!-- Profile Details -->
-                <fieldset class="border p-2 mb-3">
-                    <legend class="w-auto px-2">Profile Details</legend>
-                    <div class="row mb-3">
-                        <div class="col-md-4">
-                            <label for="employeeId" class="form-label">Employee ID</label>
-                            <input type="text" class="form-control" id="employeeId"
-                                [(ngModel)]="employeeProfile.employeeId" disabled  />
-                        </div>
-                        <div class="col-md-4">
-                            <label for="firstName" class="form-label">First Name</label>
-                            <input type="text" class="form-control" id="firstName"
-                                [(ngModel)]="employeeProfile.firstName" />
-                        </div>
-                        <div class="col-md-4">
-                            <label for="lastName" class="form-label">Last Name</label>
-                            <input type="text" class="form-control" id="lastName"
-                                [(ngModel)]="employeeProfile.lastName" />
-                        </div>
-                    </div>
-                    <div class="row mb-3">
-                        <div class="col-md-4">
-                            <label for="nic" class="form-label">NIC</label>
-                            <input type="text" class="form-control" id="nic" [(ngModel)]="employeeProfile.nic" />
-                        </div>
-                        <div class="col-md-4">
-                            <label for="gender" class="form-label">Gender</label>
-                            <input type="text" class="form-control" id="gender" [(ngModel)]="employeeProfile.gender" disabled/>
-                        </div>
-                        <div class="col-md-4">
-                            <label for="birthday" class="form-label">Birthday</label>
-                            <input type="date" class="form-control" id="birthday" [(ngModel)]="employeeProfile.dob"/>
-                        </div>
-                    </div>
-                    <div class="row mb-3">
-                        <div class="col-md-6">
-                            <label for="email" class="form-label">Email</label>
-                            <input type="email" class="form-control" id="email" [(ngModel)]="employeeProfile.email"/>
-                        </div>
-                        <div class="col-md-6">
-                            <label for="address" class="form-label">Address</label>
-                            <input type="text" class="form-control" id="address"
-                                [(ngModel)]="employeeProfile.address"/>
-                        </div>
-                    </div>
-                    <!-- <div class="row mb-3">
-                            <div class="col-md-6">
-                                <label for="contact" class="form-label">Contact Details</label>
-                                <input type="text" class="form-control" id="contact">
-                            </div>
-                        </div> -->
-                </fieldset>
-
-                <!-- Job Details -->
-                <fieldset class="border p-2 mb-3">
-                    <legend class="w-auto px-2">Job Details</legend>
-                    <div class="row mb-3">
-                        <div class="col-md-4">
-                            <label for="jobTitle" class="form-label">Job Title</label>
-                            <input type="text" class="form-control" id="jobTitle" [(ngModel)]="employeeProfile.jobRoleTitle"
-                                disabled />
-                        </div>
-                        <div class="col-md-4">
-                            <label for="branch" class="form-label">Branch</label>
-                            <input type="text" class="form-control" id="branch" [(ngModel)]="employeeProfile.branchName" disabled/>
-                        </div>
-                        <div class="col-md-4">
-                            <label for="hiredDate" class="form-label">Hired Date</label>
-                            <input type="date" class="form-control" id="hiredDate"
-                                [(ngModel)]="employeeProfile.hiredDate" disabled/>
-                        </div>
-                    </div>
-                </fieldset>
-
-                <!-- Account Details -->
-                <!-- <fieldset class="border p-2 mb-3">
-                    <legend class="w-auto px-2">Account Details</legend>
-                    <div class="row mb-3">
-                        <div class="col-md-6">
-                            <label for="username" class="form-label">Username</label>
-                            <input type="text" class="form-control" id="username"
-                                [(ngModel)]="employeeProfile.account.username" disabled />
-                        </div>
-                        <div class="col-md-6">
-                            <label for="password" class="form-label">New Password</label>
-                            <input type="text" class="form-control" id="password"
-                                [(ngModel)]="employeeProfile.account.password">
-                        </div>
-                    </div>
-                </fieldset> -->
-
-                <!-- Buttons -->
-                <div class="d-flex justify-content-end">
-                    <button type="button" class="btn btn-secondary me-2" (click)="loadProfile()">Cancel</button>
-                    <button type="button" class="btn btn-success me-2" (click)="updateProfile()">Update</button>
-                </div>
+  <div class="col-3">
+    <app-sidebar></app-sidebar>
+  </div>
+  <div class="col-9">
+    <div class="container-fluid">
+      <div class="row">
+        <!-- Profile Details -->
+        <fieldset class="border p-2 mb-3">
+          <legend class="w-auto px-2">Profile Details</legend>
+          <div class="row mb-3">
+            <div class="col-md-4">
+              <label for="employeeId" class="form-label">Employee ID</label>
+              <input type="text" class="form-control" id="employeeId"
+                     [(ngModel)]="employeeProfile.employeeId" disabled/>
             </div>
+            <div class="col-md-4">
+              <label for="firstName" class="form-label">First Name</label>
+              <input type="text" class="form-control" id="firstName"
+                     [(ngModel)]="employeeProfile.firstName"/>
+            </div>
+            <div class="col-md-4">
+              <label for="lastName" class="form-label">Last Name</label>
+              <input type="text" class="form-control" id="lastName"
+                     [(ngModel)]="employeeProfile.lastName"/>
+            </div>
+          </div>
+          <div class="row mb-3">
+            <div class="col-md-4">
+              <label for="nic" class="form-label">NIC</label>
+              <input type="text" class="form-control" id="nic" [value]="employeeProfile.nic" disabled/>
+            </div>
+            <div class="col-md-4">
+              <label for="gender" class="form-label">Gender</label>
+              <input type="text" class="form-control" id="gender" [value]="formattedGender" disabled/>
+            </div>
+            <div class="col-md-4">
+              <label for="birthday" class="form-label">Birthday</label>
+              <input type="date" class="form-control" id="birthday" [value]="employeeProfile.dob" disabled/>
+            </div>
+          </div>
+          <div class="row mb-3">
+            <div class="col-md-6">
+              <label for="email" class="form-label">Email</label>
+              <input type="email" class="form-control" id="email"
+                     [(ngModel)]="employeeProfile.email"/>
+            </div>
+            <div class="col-md-6">
+              <label for="address" class="form-label">Address</label>
+              <input type="text" class="form-control" id="address"
+                     [(ngModel)]="employeeProfile.address"/>
+            </div>
+          </div>
+          <!-- <div class="row mb-3">
+                  <div class="col-md-6">
+                      <label for="contact" class="form-label">Contact Details</label>
+                      <input type="text" class="form-control" id="contact">
+                  </div>
+              </div> -->
+        </fieldset>
+
+        <!-- Job Details -->
+        <fieldset class="border p-2 mb-3">
+          <legend class="w-auto px-2">Job Details</legend>
+          <div class="row mb-3">
+            <div class="col-md-4">
+              <label for="jobTitle" class="form-label">Job Title</label>
+              <input type="text" class="form-control" id="jobTitle" [value]="employeeProfile.jobRoleTitle"
+                     disabled/>
+            </div>
+            <div class="col-md-4">
+              <label for="branch" class="form-label">Branch</label>
+              <input type="text" class="form-control" id="branch" [value]="employeeProfile.branchName" disabled/>
+            </div>
+            <div class="col-md-4">
+              <label for="hiredDate" class="form-label">Hired Date</label>
+              <input type="date" class="form-control" id="hiredDate"
+                     [value]="employeeProfile.hiredDate" disabled/>
+            </div>
+          </div>
+        </fieldset>
+
+        <!-- Buttons -->
+        <div class="d-flex justify-content-end">
+          <button type="button" class="btn btn-secondary me-2" (click)="getById()">Cancel</button>
+          <button type="button" class="btn btn-success me-2" (click)="updateProfile()">Update</button>
         </div>
+      </div>
     </div>
+  </div>
 </div>

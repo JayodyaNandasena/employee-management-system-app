@@ -37,3 +37,12 @@ export interface EmployeeCreate {
     isManager: boolean
   }
 }
+
+export interface EmployeeUpdate {
+  employeeId: string,
+  firstName: string,
+  lastName: string,
+  profilePicture: string,
+  address: string,
+  email: string,
+}

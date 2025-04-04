@@ -2,7 +2,7 @@ import {Injectable} from '@angular/core';
 import {HttpClient, HttpParams} from "@angular/common/http";
 import {environment} from "../environments/environment";
 import {Observable, of} from "rxjs";
-import {EmployeeCreate} from "../models";
+import {AttendanceResponse, EmployeeCreate, EmployeeRead, EmployeeUpdate} from "../models";
 
 @Injectable({
   providedIn: 'root'
@@ -16,7 +16,9 @@ export class EmployeeService {
   // persist
 
 
-  // update
+  updateProfile(data: EmployeeUpdate):Observable<EmployeeCreate | null>{
+    return this.http.put<EmployeeCreate>(`${this.baseUrl}/profile`, data);
+  }
 
   getById(id: string | null): Observable<EmployeeCreate | null> {
     if (!id) {

@@ -1,12 +1,11 @@
 import {Component, OnInit} from '@angular/core';
-import {SessionStorageService} from '../../services/session-storage.service';
 import {CommonModule} from '@angular/common';
 import {ToastrService} from 'ngx-toastr';
-import {FormsModule} from '@angular/forms';
+import {FormControl, FormGroup, FormsModule, Validators} from '@angular/forms';
 import {Router} from '@angular/router';
-import {jsDocComment} from '@angular/compiler';
 import {SidebarComponent} from "../sidebar/sidebar.component";
-import {EmployeeRead} from "../../models";
+import {EmployeeCreate, EmployeeRead, EmployeeUpdate, UserRoles} from "../../models";
+import {AuthService, EmployeeService} from "../../services";
 
 @Component({
   selector: 'app-profile',
@@ -19,7 +18,7 @@ export class ProfileComponent implements OnInit {
   public isManager: boolean = false;
 
   public employeeProfile: EmployeeRead = {
-    employeeId: this.sessionService.getEmployeeId(),
+    employeeId: "",
     firstName: "",
     lastName: "",
     nic: "",
@@ -34,74 +33,107 @@ export class ProfileComponent implements OnInit {
     account: {
       username: "",
       password: "",
-      isManager: this.sessionService.getIsManager()
+      isManager: this.isManager
     }
   };
 
+  public employeeUpdate: EmployeeUpdate = {
+    address: "",
+    email: "",
+    employeeId: "",
+    firstName: "",
+    lastName: "",
+    profilePicture: ""
+  }
+
   constructor(
-    private sessionService: SessionStorageService,
-    private toastr: ToastrService,
-    private router: Router) {
+    private readonly authService: AuthService,
+    private readonly employeeService: EmployeeService,
+    private readonly toastr: ToastrService,
+    private readonly router: Router) {
   }
 
   ngOnInit(): void {
-    this.isManager = this.sessionService.getIsManager();
-    this.loadProfile();
+    this.isManager = this.authService.hasRole([
+      UserRoles.DEPARTMENT_MANAGER,
+      UserRoles.BRANCH_MANAGER,
+      UserRoles.SUPER_ADMIN
+    ]);
+    this.getById();
   }
 
-  loadProfile() {
-    fetch("http://localhost:8081/employee/by-id?id=" + this.employeeProfile.employeeId, {
-      method: 'GET',
-      headers: {"Content-type": "application/json"}
-    })
-      .then(res => res.json())
-      .then(data => {
+  loadProfile(data: EmployeeCreate): void {
+    Object.assign(this.employeeProfile, data);
+  }
+
+  getById() {
+    this.employeeService.getById(this.authService.getEmployeeId()).subscribe({
+      next: (data) => {
         if (data) {
-          this.employeeProfile.employeeId = data.employeeId;
-          this.employeeProfile.firstName = data.firstName;
-          this.employeeProfile.lastName = data.lastName;
-          this.employeeProfile.nic = data.nic;
-          this.employeeProfile.dob = data.dob;
-          this.employeeProfile.hiredDate = data.hiredDate;
-          this.employeeProfile.address = data.address;
-          this.employeeProfile.email = data.email;
-          this.employeeProfile.gender = data.gender;
-          this.employeeProfile.branchName = data.branchName;
-          this.employeeProfile.jobRoleTitle = data.jobRoleTitle;
-          this.employeeProfile.account.username = data.account.username;
+          this.loadProfile(data);
         } else {
-          this.toastr.error(data.message, 'Data Loading Failed', {
+          this.toastr.error('No data found for this employee.', 'Data Loading Failed', {
             timeOut: 3000,
           });
         }
-      })
+      },
+      error: (err) => {
+        this.toastr.error('An error occurred while loading data.', 'Data Loading Failed', {
+          timeOut: 3000,
+        });
+        console.error('Error loading profile:', err);
+      }
+    });
   }
 
   updateProfile() {
-    console.log(this.employeeProfile);
+    if (this.employeeProfile.employeeId == null) {
+      this.toastr.error(`Couldn't load your employee ID. Please refresh the page and try again!`, 'Error', {
+        timeOut: 3000,
+      });
+      return;
+    }
 
-    this.sessionService.setEmployeeName(
-      this.employeeProfile.firstName + " " + this.employeeProfile.lastName);
+    if (this.employeeProfile.employeeId !== this.authService.getEmployeeId()) {
+      this.toastr.error(`Invalid Employee ID`, 'Error', {
+        timeOut: 3000,
+      });
+      return;
+    }
 
-    fetch("http://localhost:8081/employee", {
-      method: 'PUT',
-      body: JSON.stringify(this.employeeProfile),
-      headers: {"Content-type": "application/json"}
-    })
-      .then(res => res.json())
-      .then(data => {
+    this.employeeUpdate = {
+      ...this.employeeProfile,
+      employeeId: this.employeeProfile.employeeId || '',
+    };
+
+    this.employeeService.updateProfile(this.employeeUpdate).subscribe({
+      next: (data) => {
         if (data) {
-          this.loadProfile();
-          this.toastr.info('Profile Updated Successfully', 'Success', {
+          this.toastr.success('Profile Updated Successfully', 'Success', {
             timeOut: 3000,
           });
-
+          this.loadProfile(data);
         } else {
-          this.toastr.error(data.message, 'Data Loading Failed', {
+          this.toastr.error('Profile Update Failed.', 'Error', {
             timeOut: 3000,
           });
         }
-      })
+      },
+      error: (err) => {
+        const message = err?.error?.message || 'An error occurred while updating profile.';
+
+        this.toastr.error(message, 'Error', {
+          timeOut: 3000,
+        });
+
+        console.error('Error updating profile:', err);
+      }
+    });
+  }
+
+  get formattedGender(): string {
+    const gender = this.employeeProfile.gender;
+    return gender ? gender.charAt(0).toUpperCase() + gender.slice(1).toLowerCase() : '';
   }
 
 }
