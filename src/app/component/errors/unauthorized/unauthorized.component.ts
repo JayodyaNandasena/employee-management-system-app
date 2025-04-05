@@ -14,7 +14,6 @@ import { ToastrService } from "ngx-toastr";
   styleUrls: ['./unauthorized.component.css']
 })
 export class UnauthorizedComponent {
-  previousUrl: string | null = null;
   constructor(
     private readonly location: Location,
     private readonly authService: AuthService,
