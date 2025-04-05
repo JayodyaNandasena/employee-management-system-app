@@ -28,16 +28,12 @@ export class RequestLeavesComponent implements OnInit {
 
   constructor(
     private sessionService: SessionStorageService,
-    private router: Router,
-    private toastr: ToastrService) {
+    private readonly router: Router,
+    private readonly toastr: ToastrService) {
   }
 
   ngOnInit(): void {
     this.isManager = this.sessionService.getIsManager();
-
-    // if(this.sessionService.getEmployeeId() != null){
-    //   this.leaveForm.controls['employeeId'] = this.sessionService.getEmployeeId();
-    // }
 
   }
 

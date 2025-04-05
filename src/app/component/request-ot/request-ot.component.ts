@@ -16,7 +16,7 @@ import {SidebarComponent} from "../sidebar/sidebar.component";
 export class RequestOtComponent {
   public minDate: string = "";
 
-  otForm = new FormGroup({
+  public otForm = new FormGroup({
     employeeId : new FormControl(this.sessionService.getEmployeeId()),
     date : new FormControl("",Validators.required),
     requestDate: new FormControl(new Date().toISOString()),

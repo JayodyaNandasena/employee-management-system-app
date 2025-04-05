@@ -15,6 +15,10 @@ export class AuthService {
     this.loadToken();
   }
 
+  public isLoggedIn():boolean {
+    return !!this.token;
+  }
+
   private loadToken(): void {
     const storedToken: string | null = localStorage.getItem("authToken");
     if (storedToken) {
