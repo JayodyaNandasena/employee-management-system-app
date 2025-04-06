@@ -5,13 +5,13 @@ import {AuthService} from "../../../services";
 import {Location} from '@angular/common';
 
 @Component({
-  selector: 'app-not-found',
+  selector: 'app-page-not-found',
   standalone: true,
   imports: [],
-  templateUrl: './not-found.component.html',
-  styleUrl: './not-found.component.css'
+  templateUrl: './page-not-found.component.html',
+  styleUrl: './page-not-found.component.css'
 })
-export class NotFoundComponent {
+export class PageNotFoundComponent {
   constructor(
     private readonly location: Location,
     private readonly authService: AuthService,
