@@ -14,7 +14,7 @@ import {AuthGuard} from "./guards/auth.guard";
 import {RoleGuard} from "./guards/role.guard";
 import {UserRoles} from "./models";
 import {UnauthorizedComponent} from "./component/errors/unauthorized/unauthorized.component";
-import {NotFoundComponent} from "./component/errors/not-found/not-found.component";
+import {PageNotFoundComponent} from "./component/errors/page-not-found/page-not-found.component";
 
 export const routes: Routes = [
   {
@@ -111,8 +111,8 @@ export const routes: Routes = [
     canActivate: [AuthGuard]
   },
   {
-    path: '**',
-    component: NotFoundComponent,
+    path: "**",
+    component: PageNotFoundComponent,
     canActivate: [AuthGuard]
   }
 ];
