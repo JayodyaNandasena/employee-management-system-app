@@ -7,6 +7,7 @@ import {Token, UserRoles} from '../models';
 })
 export class AuthService {
   private token: string | null = null;
+  private expiresAt: number | null = null;
   private userRole: UserRoles | null = null;
   private username: string | null = null;
   private employeeId: string | null = null;
@@ -15,8 +16,22 @@ export class AuthService {
     this.loadToken();
   }
 
-  public isLoggedIn():boolean {
-    return !!this.token;
+  isTokenExpired(): boolean {
+    if (!this.expiresAt) {
+      return false;
+    }
+
+    try {
+      const now = Date.now().valueOf() / 1000;
+      console.log(`now: ${now}, expired: ${this.expiresAt}`);
+      return this.expiresAt < now;
+    } catch (error) {
+      return true;
+    }
+  }
+
+  public isLoggedIn(): boolean {
+    return !!this.token && !this.isTokenExpired();
   }
 
   private loadToken(): void {
@@ -37,6 +52,7 @@ export class AuthService {
 
   private decodeToken(): void {
     if (!this.token) {
+      this.expiresAt = null;
       this.userRole = null;
       this.username = null;
       this.employeeId = null;
@@ -45,6 +61,7 @@ export class AuthService {
 
     try {
       const decodedToken: Token = jwtDecode(this.token);
+      this.expiresAt = decodedToken.exp;
       this.userRole = decodedToken.role as UserRoles;
       this.username = decodedToken.sub;
       this.employeeId = decodedToken.id;

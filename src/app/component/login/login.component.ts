@@ -1,6 +1,6 @@
 import {Component} from '@angular/core';
 import {FormControl, FormGroup, ReactiveFormsModule, Validators} from '@angular/forms';
-import {Router} from '@angular/router';
+import {ActivatedRoute, Router} from '@angular/router';
 import {LoginRequest} from '../../models';
 import {ToastrService} from 'ngx-toastr';
 import {NgIf} from '@angular/common';
@@ -28,10 +28,22 @@ export class LoginComponent {
 
   constructor(
     private readonly router: Router,
+    private readonly route: ActivatedRoute,
     private readonly http: HttpClient,
     private readonly loginService: LoginService,
     private readonly authService: AuthService,
     private readonly toastr: ToastrService) {
+    this.route.queryParams.subscribe(params => {
+      const sessionExpired = params['sessionExpired'];
+      if (sessionExpired) {
+        this.toastr.warning(
+          "Your session has expired. Please log in again.",
+          "Expired",
+          {timeOut: 0, extendedTimeOut: 0, closeButton: true},
+        );
+        this.authService.clearToken();
+      }
+    });
   }
 
   login() {
@@ -46,18 +58,18 @@ export class LoginComponent {
           if (data.token) {
             this.authService.setToken(data.token);
 
-            this.toastr.success("Login Successful", "Welcome!", { timeOut: 4000 });
+            this.toastr.success("Login Successful", "Welcome!", {timeOut: 4000});
 
             this.router.navigateByUrl('/dashboard');
           } else {
-            this.toastr.error("Login Failed", "Invalid credentials", { timeOut: 3000 });
+            this.toastr.error("Login Failed", "Invalid credentials", {timeOut: 3000});
           }
         },
         error: (error) => {
           if (error.status === 401) {
-            this.toastr.error("Invalid Credentials", "Please check your username and password", { timeOut: 3000 });
+            this.toastr.error("Invalid Credentials", "Please check your username and password", {timeOut: 3000});
           } else {
-            this.toastr.error("Error", "Login Failed. Please try again later.", { timeOut: 3000 });
+            this.toastr.error("Error", "Login Failed. Please try again later.", {timeOut: 3000});
           }
         }
       });
