@@ -1,10 +1,11 @@
 import {Component, OnInit} from '@angular/core';
-import {SessionStorageService} from '../../services/session-storage.service';
 import {CommonModule} from '@angular/common';
 import {ToastrService} from 'ngx-toastr';
 import {FormControl, FormGroup, ReactiveFormsModule, Validators} from '@angular/forms';
 import {Router} from '@angular/router';
 import {SidebarComponent} from "../sidebar/sidebar.component";
+import {AuthService, TimeOffService} from "../../services";
+import {TimeOffRequest, UserRoles} from "../../models";
 
 @Component({
   selector: 'app-request-leaves',
@@ -16,66 +17,91 @@ import {SidebarComponent} from "../sidebar/sidebar.component";
 export class RequestLeavesComponent implements OnInit {
   public isManager: boolean = false;
 
-  leaveForm = new FormGroup({
-    employeeId: new FormControl(this.sessionService.getEmployeeId()),
+  public leaveForm = new FormGroup({
     text: new FormControl("", Validators.required),
-    requestDateTime: new FormControl(new Date().toISOString()),
     startDate: new FormControl("", Validators.required),
     startTime: new FormControl("", Validators.required),
     endDate: new FormControl("", Validators.required),
     endTime: new FormControl("", Validators.required)
   })
+  protected minDate: string | undefined;
 
   constructor(
-    private sessionService: SessionStorageService,
+    private readonly authService: AuthService,
+    private readonly timeOffService: TimeOffService,
     private readonly router: Router,
     private readonly toastr: ToastrService) {
   }
 
   ngOnInit(): void {
-    this.isManager = this.sessionService.getIsManager();
+    this.isManager = this.authService.hasRole([
+      UserRoles.DEPARTMENT_MANAGER,
+      UserRoles.BRANCH_MANAGER,
+      UserRoles.SUPER_ADMIN
+    ]);
 
+    const today = new Date();
+    this.minDate = today.toISOString().split('T')[0]; // "yyyy-MM-dd"
   }
 
   submitRequest() {
+    if (this.leaveForm.invalid) {
+      this.toastr.error("Please fill in all required fields", "Validation Error");
+      return;
+    }
 
-    fetch("http://localhost:8081/timeOff", {
-      method: 'POST',
-      body: JSON.stringify(this.leaveForm.value),
-      headers: {"Content-type": "application/json"}
-    })
-      .then(res => res.json())
-      .then(data => {
-        if (data.status === true) {
-          this.toastr.success('Request Sent Successfully', 'Success', {
-            timeOut: 3000,
-          });
+    const formValue = this.leaveForm.value;
+    const now = new Date();
 
-        } else {
-          this.toastr.error(data.message, 'Error', {
-            timeOut: 3000,
-          });
+    const startDateTime = new Date(`${formValue.startDate}T${formValue.startTime}`);
+    const endDateTime = new Date(`${formValue.endDate}T${formValue.endTime}`);
+    const requestDateTime = now; // current timestamp
+
+    if (startDateTime < now) {
+      this.toastr.error("Start date and time cannot be in the past", "Validation Error");
+      return;
+    }
+
+    if (endDateTime < now) {
+      this.toastr.error("End date and time cannot be in the past", "Validation Error");
+      return;
+    }
+
+    if (endDateTime < startDateTime) {
+      this.toastr.error("End date-time cannot be before start date-time", "Validation Error");
+      return;
+    }
+
+    const requestPayload: TimeOffRequest = {
+      employeeId: this.authService.getEmployeeId(),
+      text: formValue.text,
+      requestDateTime: this.toLocalISOString(requestDateTime),
+      startDateTime: this.toLocalISOString(startDateTime),
+      endDateTime: this.toLocalISOString(endDateTime)
+    };
+
+    this.timeOffService.persist(requestPayload)
+      .subscribe({
+        next: (data) => {
+          if (data?.status === true) {
+            this.toastr.success('Request Sent Successfully', 'Success', {timeOut: 3000});
+            this.leaveForm.reset();
+          } else {
+            this.toastr.error(data?.message, 'Error', {timeOut: 3000});
+          }
+        },
+        error: (error) => {
+          this.toastr.error("Error", "Request Failed. Please try again later.", {timeOut: 3000});
         }
-      })
+      });
   }
 
   discardRequest() {
     this.leaveForm.reset();
   }
 
-  // getEndDateTime(): string {
-  //   if (this.endDate && this.endTime) {
-  //     const dateTime = new Date(`${this.endDate}T${this.endTime}`);
-  //     return dateTime.toISOString(); // Returns ISO 8601 format
-  //   }
-  //   return "";
-  // }
-
-  // getStartDateTime(): string {
-  //   if (this.startDate && this.startTime) {
-  //     const dateTime = new Date(`${this.startDate}T${this.startTime}`);
-  //     return dateTime.toISOString(); // Returns ISO 8601 format
-  //   }
-  //   return "";
-  // }
+  toLocalISOString(date: Date): string {
+    const tzOffset = date.getTimezoneOffset() * 60000; // in milliseconds
+    return new Date(date.getTime() - tzOffset).toISOString().slice(0, -1);
+  }
 }

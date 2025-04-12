@@ -7,11 +7,16 @@ export interface LeavePolicy {
 }
 
 export interface TimeOffRequest {
-  employeeId: string | null,
-  text: string,
+  employeeId: string | null | undefined,
+  text: string | null | undefined,
   requestDateTime: string,
   startDateTime: string,
   endDateTime: string
+}
+
+export interface TimeOffRequestResponse {
+  status: boolean,
+  message: string,
 }
 
 export interface TimeOffRequestRead {
@@ -25,10 +30,10 @@ export interface TimeOffRequestRead {
 }
 
 export interface TimeOffApproval {
-  managerId: string|null;
-  requestId:string;
-  status:StatusEnum;
-  approvedDateTime:string;
+  managerId: string | null;
+  requestId: string;
+  status: StatusEnum;
+  approvedDateTime: string;
 }
 
 export interface TimeOffUpdateResponse {
