@@ -12,14 +12,14 @@
                     <form [formGroup]="loginForm">
                         <div class="form-group">
                             <label for="username" class="my-3 fs-3">Username</label>
-                            <input type="text" formControlName="username" class="form-control my-3 fs-3" placeholder="Username">
+                            <input type="text" id="username" formControlName="username" class="form-control my-3 fs-3" placeholder="Username">
                             <p class="text-danger" *ngIf="loginForm.controls['username']['errors']
                                 && loginForm.controls['username'].errors['required']
                                 && loginForm.controls['username'].touched">Username Not Provided</p>
                         </div>
                         <div class="form-group">
                             <label for="password" class="my-3 fs-3">Password</label>
-                            <input type="password" formControlName="password" class="form-control my-3 fs-3" placeholder="Password">
+                            <input type="password" id="password" formControlName="password" class="form-control my-3 fs-3" placeholder="Password">
                             <p class="text-danger" *ngIf="loginForm.controls['password']['errors']
                                 && loginForm.controls['password'].errors['required']
                                 && loginForm.controls['password'].touched">Password Not Provided</p>
@@ -30,7 +30,7 @@
                         <div class="d-flex justify-content-center">
                             <button (click)="login()" class="btn text-white my-3 fs-3 btn-login">Login</button>
                         </div>
-                    </form>  
+                    </form>
                 </div>
             </div>
         </div>
