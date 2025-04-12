@@ -82,14 +82,7 @@ export const routes: Routes = [
   {
     path: "manageAttendance",
     component: ManageAttendanceComponent,
-    canActivate: [RoleGuard],
-    data: {
-      expectedRoles: [
-        UserRoles.SUPER_ADMIN,
-        UserRoles.BRANCH_MANAGER,
-        UserRoles.DEPARTMENT_MANAGER
-      ]
-    }
+    canActivate: [AuthGuard]
   },
   {
     path: "salary",
