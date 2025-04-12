@@ -71,27 +71,35 @@ export class SalarySlipComponent implements OnInit {
       return;
     }
 
-    let excludedElement: HTMLElement | null = document.getElementById('download-icon');
-
+    const excludedElement: HTMLElement | null = document.getElementById('download-icon');
     if (excludedElement) {
       excludedElement.style.display = 'none'; // Hide the element
     }
 
     html2canvas(element, {scale: 2}).then(canvas => {
       const imgData = canvas.toDataURL('image/png');
-      const pdf = new jsPDF('p', 'mm', 'a4');
 
-      const imgWidth = 210;
-      const imgHeight = (canvas.height * imgWidth) / canvas.width;
+      const pdf = new jsPDF('p', 'mm', 'a4');
+      const pageWidth = pdf.internal.pageSize.getWidth();
+      const margin = 10
+      const imgWidth = pageWidth - 2 * margin;  // Adjusted width
+      const imgHeight = (canvas.height * imgWidth) / canvas.width;  // Maintain aspect ratio
+
+      const now = new Date();
+      const monthYear = now.toLocaleString('default', {month: 'long', year: 'numeric'});
+      const downloadDateTime = now.toLocaleString(); // includes date and time
 
       let yPosition = 25;
+      pdf.setFontSize(12);
       pdf.text(`Employee ID: E001`, 15, yPosition);
       yPosition += 5;
-      pdf.text(`Month: February`, 15, yPosition);
+      pdf.text(`Salary Month: ${monthYear}`, 15, yPosition);
+      yPosition += 5;
+      pdf.text(`Downloaded on: ${downloadDateTime}`, 15, yPosition);
       yPosition += 5;
 
-      pdf.addImage(imgData, 'PNG', 10, yPosition + 5, imgWidth, imgHeight);
-      pdf.save(`salary.pdf`);
+      pdf.addImage(imgData, 'PNG', margin, yPosition + 5, imgWidth, imgHeight);
+      pdf.save(`salary-slip-${monthYear.replace(' ', '-')}.pdf`);
 
       if (excludedElement) {
         excludedElement.style.display = ''; // Restore the element
