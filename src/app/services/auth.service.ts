@@ -23,7 +23,6 @@ export class AuthService {
 
     try {
       const now = Date.now().valueOf() / 1000;
-      console.log(`now: ${now}, expired: ${this.expiresAt}`);
       return this.expiresAt < now;
     } catch (error) {
       return true;
