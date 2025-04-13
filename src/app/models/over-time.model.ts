@@ -1,6 +1,21 @@
 import {StatusEnum} from "./enums";
 import {EmployeeCreate} from "./employee.model";
 
+export interface OverTimeRequest {
+  employeeId: string|null;
+  requestDate: Date;
+  date:string | null | undefined;
+  startTime: string | null | undefined;
+  endTime: string | null | undefined;
+  text: string | null | undefined;
+  status: StatusEnum;
+}
+
+export interface OverTimeRequestResponse {
+  status: boolean,
+  message: string,
+}
+
 export interface OverTimeRequestRead {
   requestId: string;
   employee: EmployeeCreate;

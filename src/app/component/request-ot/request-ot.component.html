@@ -1,71 +1,51 @@
 <div class="row">
-    <div class="col-3">
-      <app-sidebar></app-sidebar>
-    </div>
-    <div class="col-9">
-        <main class="content px-3 py-2">
-            <div class="container-fluid">
-                <div class="mb-3">
-                    <h4>Request OT</h4>
-                </div>
-                <form [formGroup]="otForm">
-                    <div>
-                        <label for="txt-ot-date" class="form-label">Date</label>
-                        <input formControlName="date" type="date" id="txt-ot-date" class="form-control" />
-                        <p class="text-danger" *ngIf="otForm.controls['date']['errors']
-                        && otForm.controls['date'].errors['required']
+  <div class="col-3">
+    <app-sidebar></app-sidebar>
+  </div>
+  <div class="col-9">
+    <main class="content px-3 py-2">
+      <div class="container-fluid">
+        <div class="mb-3">
+          <h4>Request OT</h4>
+        </div>
+        <form [formGroup]="otForm">
+          <div>
+            <label for="txt-ot-date" class="form-label">Date</label>
+            <input formControlName="date" type="date" id="txt-ot-date" class="form-control" [max]="maxDate"/>
+            <p class="text-danger" *ngIf="otForm.controls['date']['errors']
+                        && otForm.controls['date'].errors?.['required']
                         && otForm.controls['date'].touched">
-                            Date Not Provided</p>
-                    </div>
+              Date Not Provided</p>
+          </div>
 
-                    <div>
-                        <label for="txt-product-start-time" class="form-label">From Time</label>
-                        <input formControlName="startTime" type="time" id="txt-product-start-time"
-                            class="form-control" />
-                    </div>
-                    <p class="text-danger" *ngIf="otForm.controls['startTime'].status == 'INVALID'
+          <div>
+            <label for="txt-product-start-time" class="form-label">From Time</label>
+            <input formControlName="startTime" type="time" id="txt-product-start-time"
+                   class="form-control"/>
+          </div>
+          <p class="text-danger" *ngIf="otForm.controls['startTime'].status == 'INVALID'
                         && otForm.controls['startTime'].touched
                         ">Start Time Not Provided</p>
 
-                    <div>
-                        <label for="txt-product-end-time" class="form-label">To Time</label>
-                        <input formControlName="endTime" type="time" id="txt-product-end-time" class="form-control" />
-                    </div>
-                    <p class="text-danger" *ngIf="otForm.controls['endTime'].status == 'INVALID'
+          <div>
+            <label for="txt-product-end-time" class="form-label">To Time</label>
+            <input formControlName="endTime" type="time" id="txt-product-end-time" class="form-control"/>
+          </div>
+          <p class="text-danger" *ngIf="otForm.controls['endTime'].status == 'INVALID'
                         && otForm.controls['endTime'].touched
                         ">End Time Not Provided</p>
 
-                    <div class="mb-3">
-                        <label for="reason" class="form-label">Reason</label>
-                        <textarea formControlName="text" class="form-control" id="reason" name="reason" rows="3"></textarea>
-                    </div>
+          <div class="mb-3">
+            <label for="reason" class="form-label">Reason</label>
+            <textarea formControlName="text" class="form-control" id="reason" name="reason" rows="3"></textarea>
+          </div>
 
-                    <div class="mt-3">
-                        <button class="btn btn-primary" (click)="persistRequest()">Submit</button>
-                        <button class="btn btn-secondary">Discard</button>
-                    </div>
-                </form>
-                <!-- <form>
-                    <div class="mb-3">
-                        <label for="date" class="form-label">Date</label>
-                        <input type="date" class="form-control" id="date" name="date" [(ngModel)]="request.date" required>
-                    </div>
-                    <div class="mb-3">
-                        <label for="fromTime" class="form-label">From Time</label>
-                        <input type="time" class="form-control" id="fromTime" name="fromTime" [(ngModel)]="request.startTime" required>
-                    </div>
-                    <div class="mb-3">
-                        <label for="toTime" class="form-label">To Time</label>
-                        <input type="email" class="form-control" id="toTime" name="toTime" [(ngModel)]="request.endTime" [attr.min]="minDate" required>
-                    </div>
-                    <div class="mb-3">
-                        <label for="reason" class="form-label">Reason</label>
-                        <textarea class="form-control" id="reason" name="reason" rows="3" [(ngModel)]="request.text"></textarea>
-                    </div>
-                    <button type="submit" class="btn btn-primary" (click)="persistRequest()">Submit</button>
-                    <button type="reset" class="btn btn-secondary">Discard</button>
-                </form>                 -->
-            </div>
-        </main>
-    </div>
+          <div class="mt-3">
+            <button class="btn btn-primary" (click)="persistRequest()">Submit</button>
+            <button class="btn btn-secondary mx-3" (click)="discardRequest()">Discard</button>
+          </div>
+        </form>
+      </div>
+    </main>
+  </div>
 </div>
